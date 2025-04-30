@@ -14,7 +14,16 @@ export const skillType = {
     CM: "커맨더"
 }
 
+export const pickupType ={
+    PICKUP: "픽업중",
+    UPCOMING: "픽업 예정",
+    COMMON: "상시",
+    NONE: "방랑중"
+
+}
+
 export const enumMap ={
     artifact : artifactType,
-    skill : skillType
+    skill : skillType,
+    pickup: pickupType,
 }
