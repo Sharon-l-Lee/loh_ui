@@ -1,10 +1,11 @@
 <script setup>
 import SearchField from './components/SearchField.vue'
+import RerunDate from './components/RerunDate.vue'
 </script>
 
 <template>
-  <SearchField /> 
-
+  <!-- <SearchField />  -->
+<RerunDate />
 </template>
 
 <style scoped>

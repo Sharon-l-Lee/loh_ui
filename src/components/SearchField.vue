@@ -8,6 +8,7 @@
           <span class="text-xl font-bold">Lord of Heroes</span>
         </div>
         <nav class="hidden md:flex gap-6">
+          <router-link to="/rerun" class="text-sm font-medium hover:text-amber-500">복각/실장</router-link>
           <a href="#" class="text-sm font-medium hover:text-amber-500">문의</a>
         </nav>
       </div>
@@ -202,7 +203,7 @@
               >
                 <!-- 아티팩트 이미지 -->
                 <img
-                  :src="`http://localhost:5173/icons/element/fire.webp`" 
+                  :src="`http://localhost:5173/icons/artifact/라플라스_495.webp`" 
                   class="w-16 h-16 rounded-lg object-cover shrink-0"
                   alt="아티팩트 이미지"
                 />
