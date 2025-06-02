@@ -1,21 +1,5 @@
 <template>
     <div class="min-h-screen bg-gray-950 text-gray-100">
-
-    <header class="sticky top-0 z-40 border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 shadow-sm">
-      <div class="container mx-auto flex h-16 items-center justify-between px-4 py-4">
-        <div class="flex items-center gap-2">
-          <Crown class="h-6 w-6 text-amber-500" />
-          <span class="text-xl font-bold">Lord of Heroes</span>
-        </div>
-        <nav class="hidden md:flex gap-6">
-          <router-link to="/rerun" class="text-sm font-medium hover:text-amber-500">복각/실장</router-link>
-          <a href="#" class="text-sm font-medium hover:text-amber-500">문의</a>
-        </nav>
-      </div>
-    </header>
- 
-    
-  
     <main class="flex-1">
       <section class="w-full py-8 md:py-16 bg-gradient-to-b border-b border-gray-200">
         <div class=" text-right container mx-auto px-4 md:px-6">

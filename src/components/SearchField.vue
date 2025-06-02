@@ -1,18 +1,6 @@
 <template>
   <div class="flex min-h-screen flex-col bg-white text-gray-900">
-    <!-- Header -->
-    <header class="sticky top-0 z-40 border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 shadow-sm">
-      <div class="container mx-auto flex h-16 items-center justify-between px-4 py-4">
-        <div class="flex items-center gap-2">
-          <Crown class="h-6 w-6 text-amber-500" />
-          <span class="text-xl font-bold">Lord of Heroes</span>
-        </div>
-        <nav class="hidden md:flex gap-6">
-          <router-link to="/rerun" class="text-sm font-medium hover:text-amber-500">복각/실장</router-link>
-          <a href="#" class="text-sm font-medium hover:text-amber-500">문의</a>
-        </nav>
-      </div>
-    </header>
+    
 
     <!-- Main Content -->
     <main class="flex-1">
@@ -37,7 +25,7 @@
                 type="submit"
                 class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-md font-medium"
               >
-                Search
+                검색
               </button>
             </form>
             <!-- <div class="flex flex-wrap justify-center gap-2 mt-4">
@@ -55,7 +43,7 @@
         </div>
       </section>
 
-      <!-- Search Results -->
+      <!-- 검색 결과 -->
       <section class="w-full py-8 md:py-12">
         <div class="container mx-auto px-4 md:px-6">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -240,34 +228,16 @@
             <p class="text-gray-600 max-w-md mx-auto">
                "{{ searchQuery }}"
             </p>
-            <button class="mt-4 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-100">
-              Clear Search
-            </button>
           </div>
         <!-- </div> -->
       </section>
     </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-gray-200 bg-black">
-      <div class="container mx-auto flex flex-col items-center justify-between gap-4 py-10 md:h-24 md:flex-row md:py-0 px-4">
-        <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-          <Crown class="h-6 w-6 text-amber-500" />
-          <p class="text-center text-sm leading-loose md:text-left text-white">
-            &copy; {{ new Date().getFullYear() }} Copyright CLOVERGAMES.INC All rights reserved.
-          </p>
-        </div>
-        <div class="flex gap-4">
-          <a href="#" class="text-sm font-medium text-white hover:underline underline-offset-4">Contact</a>
-        </div>
-      </div>
-    </footer>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { Search, Crown, Sword, Shield, Book, Star, Filter, X } from 'lucide-vue-next'
+import { Search } from 'lucide-vue-next'
 import instance from '../api/axiosInstance.js'
 import  { enumMap } from "../constants/enumsMap.js";
 
@@ -317,12 +287,6 @@ const detailSearch = (idx, type, id) =>{
   .then((response)=> {
     details.value = response.data;
     isClick.value = !isClick.value;
-    console.log(response);
-    console.log(isClick.value);
-    console.log(skillIdx.value);
-    
-    
-    
   })
   .catch((error)=> {
     console.log(error);

@@ -22,8 +22,16 @@ export const pickupType ={
 
 }
 
+export const contactType ={
+    ER: "오류제보",
+    FR: "기능추가요청",
+    ET: "기타"
+
+}
+
 export const enumMap ={
     artifact : artifactType,
     skill : skillType,
     pickup: pickupType,
+    contact: contactType
 }
