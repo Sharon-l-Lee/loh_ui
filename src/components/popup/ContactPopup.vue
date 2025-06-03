@@ -40,6 +40,8 @@ import { X, MessageSquare } from 'lucide-vue-next';
 import { ref, reactive } from 'vue';
 import instance from '@/api/axiosInstance.js'
 import  { enumMap } from "../../constants/enumsMap.js";
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 //data
 
@@ -65,11 +67,27 @@ const contactFormSubmit = () => {
   }
   ).then((res)=>{
     console.log(res);
+    toast("문의가 접수되었습니다.",{
+      type: "info",
+      theme: "auto",
+      position: "top-center",
+      autoClose: 2000,
+      pauseOnHover: true
+
+    })
     
   }).catch((err)=>{
-    console.log(err);
+    toast("문의 접수 중에 오류가 발생하였습니다. 다시 시도해주십시오.",{
+      type: "error",
+      theme: "auto",
+      position: "top-center",
+      autoClose: 2000,
+      pauseOnHover: true
+
+    })
     
   }).finally(()=>{
+    
 
   })
 
