@@ -21,7 +21,7 @@
             <option value="ET">기타</option>
           </select>
           <textarea placeholder="내용" class="w-full border border-gray-300 rounded px-4 py-2" rows="4" v-model="form.content"></textarea>
-          <button @click="contactFormSubmit" class="w-full bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded">
+          <button type="button" @click="contactFormSubmit" class="w-full bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded">
             전송
           </button>
         </form>
@@ -41,55 +41,35 @@ import { ref, reactive } from 'vue';
 import instance from '@/api/axiosInstance.js'
 import  { enumMap } from "../../constants/enumsMap.js";
 import { toast } from 'vue3-toastify'
-import 'vue3-toastify/dist/index.css'
+import { defineEmits } from 'vue';
+
 
 //data
-
 const form = reactive({
     title : '',
     contactType : '',
     content: ''
 })
 
+const emit = defineEmits(['close']);
+
 //method
-
-const contactFormSubmit = () => {
-  console.log('실행됨');
-  
-  instance.post('contact',{
-    title: form.title,
-    type: form.contactType,
-    contents: form.content
-  }, {
-    headers: {
-    'Content-Type': 'application/json'
-    }
+const contactFormSubmit = async () => {
+  try{
+    await instance.post('contact',{
+      title: form.title,
+      type: form.contactType,
+      contents: form.content
+    }, {
+      headers: {
+      'Content-Type': 'application/json'
+      }
+    })
+    toast.info("문의가 접수되었습니다.");
+    emit('close')
+  } catch(err){
+    toast.error("문의 접수 중에 오류가 발생하였습니다. 다시 시도해주십시오.");
   }
-  ).then((res)=>{
-    console.log(res);
-    toast("문의가 접수되었습니다.",{
-      type: "info",
-      theme: "auto",
-      position: "top-center",
-      autoClose: 2000,
-      pauseOnHover: true
-
-    })
-    
-  }).catch((err)=>{
-    toast("문의 접수 중에 오류가 발생하였습니다. 다시 시도해주십시오.",{
-      type: "error",
-      theme: "auto",
-      position: "top-center",
-      autoClose: 2000,
-      pauseOnHover: true
-
-    })
-    
-  }).finally(()=>{
-    
-
-  })
 
 }
 </script>

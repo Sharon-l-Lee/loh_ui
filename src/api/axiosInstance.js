@@ -5,7 +5,7 @@ const url ="http://localhost:8888/api/"
 
 const instance = axios.create({
   baseURL: url,
-  timeout: 1000,
+  timeout: 5000,
   withCredentials: true  
 });
 
