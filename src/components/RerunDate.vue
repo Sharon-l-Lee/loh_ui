@@ -1,37 +1,16 @@
 <template>
-    <div class="min-h-screen bg-gray-950 text-gray-100">
+    <div class="min-h-screen bg-white text-gray-100">
     <main class="flex-1">
       <section class="w-full py-8 md:py-16 bg-gradient-to-b border-b border-gray-200">
         <div class=" text-right container mx-auto px-4 md:px-6">
        
           <div class="max-w-4xl mx-auto text-center">
             <h1 class="text-3xl font-bold tracking-tighter sm:text-5xl mb-6">
-                <span class="text-purple-500">복각 / 실장</span> 캘린더
+                <span class="text-amber-500">실장 캘린더</span> 
             </h1>
           </div>
-          <form class="flex w-1/4 mb-8 ml-auto" @submit.prevent="characterList">
-            <button
-              type="button"
-              @click="resetSearch" 
-              class="flex items-center justify-center w-12 h-12 bg-gray-300 border border-gray-300 rounded-md mr-2">
-              <ListRestart size="28" class="text-gray-700" />
-            </button>
 
-            
-            <input
-              type="search"
-              placeholder="이름 검색"
-              class="flex-grow rounded-md pl-4 pr-4 py-2 text-lg bg-white border border-gray-300 focus:border-amber-500 focus:outline-none text-gray-900 shadow-sm"
-              v-model="searchName"
-            />
-            
-            <button
-              type="submit"
-              class="ml-2 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-md font-medium"
-            >
-              검색
-            </button>
-          </form>
+
 
           <!-- <div class="container mx-auto px-4 md:px-6">
             <h2 class="text-xl font-bold mb-2 flex items-center">
@@ -39,14 +18,43 @@
               복각주기캘린더
             </h2>
           </div> -->
+          <form
+            class="flex items-center justify-end space-x-2 mb-8"
+            @submit.prevent="characterList"
+          >
+            <!-- 리셋 버튼 -->
+            <button
+              type="button"
+              @click="resetSearch"
+              class="h-12 w-12 flex items-center justify-center bg-gray-300 border border-gray-300 rounded-md"
+            >
+              <ListRestart class="text-gray-700 w-6 h-6" />
+            </button>
 
-          <div class="space-y-4" v-for="chara in charaList">
-              <div class="bg-gray-900 rounded-lg p-4 flex items-center">
+            <!-- 검색 인풋 -->
+            <input
+              type="search"
+              placeholder="이름 검색"
+              class="w-64 h-12 rounded-md px-4 text-lg bg-white border border-gray-300 focus:border-amber-500 focus:outline-none text-gray-900 shadow-sm"
+              v-model="searchName"
+            />
+
+            <!-- 검색 버튼 -->
+            <button
+              type="submit"
+              class="h-12 bg-amber-500 hover:bg-amber-600 text-white px-4 rounded-md font-medium text-lg"
+            >
+              검색
+            </button>
+          </form>
+
+          <div class="space-y-4 bg-white" v-for="chara in charaList">
+              <div class="bg-gray-100 mb-3 rounded-lg p-4 flex items-center">
                 <img :src="`http://localhost:5173/icons/element/water.webp`"
-                class="mr-4 border-2 border-gray-800 w-16 h-16 rounded-lg"/>
+                class="mr-4 border-1 border-gray-200 w-16 h-16 rounded-lg"/>
                 <div class="flex-1">
                   <div class="flex items-center gap-2">
-                    <h3 class="font-bold">{{chara.cname}}</h3>
+                    <h3 class="font-bold text-gray-800">{{chara.cname}}</h3>
                     <span class="text-xs px-2 py-0.5 rounded-full bg-gray-800">
                       {{ chara.element_name }} * {{ chara.job_name }}
                     </span>
@@ -57,7 +65,7 @@
                   <div class="mt-1">
                     <div class="flex justify-between items-center">
                       <span class="text-sm font-medium text-purple-400">
-                        첫 실장일 : {{chara.release_date}}
+                        최근 출현일 : {{chara.release_date}}
                       </span>
                       <span class="text-xs px-2 py-0.5 rounded-full bg-purple-900 text-purple-200">
       

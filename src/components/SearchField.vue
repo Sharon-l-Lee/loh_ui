@@ -97,7 +97,7 @@
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4" v-if="characters?.length">
               <div v-for="ch in characters" class="bg-zinc-900 p-4 rounded-xl shadow-lg flex items-center gap-4">
                 <img :src="ch.imgUrl" class="w-16 h-16 rounded-full" />
-                <div class="flex-1">
+                <div class="flex-1" @click ="detailOpen(ch.id)">
                   <h2 class="text-lg text-white font-semibold">{{ ch.cname }} ({{ ch.cname_en }})</h2>
                   <div class="flex items-center gap-2 mt-1">
                     <img :src="getJobIcon(ch.job_id)" class="w-8 h-8" :alt="ch.job_name" title="직업" />
@@ -117,7 +117,7 @@
               <!-- <div class="flex flex-col space-y-2"> -->
                 <div
                 class="flex gap-4 bg-zinc-900 p-4 rounded-xl shadow-md hover:ring-2 hover:ring-amber-400 transition cursor-pointer"
-                @click ="detailSearch(skill.c_id,'S',skill.sid)"
+                @click ="detailOpen(skill.c_id)"
                 >
                 <!-- 스킬 이미지 -->
                   <img
@@ -186,6 +186,7 @@
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4" v-if="artifacts?.length">
               <div
                 v-for="af in artifacts"
+                @click ="detailOpen(af.c_id)"
                 :key="af.id"
                 class="flex gap-4 bg-zinc-900 p-4 rounded-xl shadow-md hover:ring-2 hover:ring-amber-400 transition cursor-pointer overflow-hidden"
               >
@@ -217,6 +218,8 @@
             </div>
             <!-- </div> -->
             </div>
+
+            <CharaDetailPopup v-if="isClick===true" @close="isClick=false" :cid="selectedId"></CharaDetailPopup>
           </div>
 
           <!-- No Results -->
@@ -224,7 +227,7 @@
             <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-amber-100 mb-4">
               <Search class="h-8 w-8 text-amber-500" />
             </div>
-            <h2 class="text-2xl font-bold mb-2">No results found</h2>
+            <h2 class="text-2xl font-bold mb-2">결과 없음</h2>
             <p class="text-gray-600 max-w-md mx-auto">
                "{{ searchQuery }}"
             </p>
@@ -240,6 +243,7 @@ import { ref, computed, onMounted } from 'vue'
 import { Search } from 'lucide-vue-next'
 import instance from '../api/axiosInstance.js'
 import  { enumMap } from "../constants/enumsMap.js";
+import CharaDetailPopup from "./popup/CharacterDetailPopup.vue";
 
 
 // State
@@ -248,11 +252,9 @@ const searchQuery = ref('')
 const artifacts = ref([]); 
 const characters = ref([]);
 const skills = ref([]);
-const characterIdx = ref(0);
-const skillIdx = ref(0);
-const artifactIdx = ref(0);
-const details = ref({});
+const selectedId = ref(null);
 const isClick = ref(false);
+const props = defineProps(['cid']);
 
 
 
@@ -279,22 +281,10 @@ const handleSearch = () => {
   });
 }
 
-const detailSearch = (idx, type, id) =>{
-  characterIdx.value = idx;
-  if(type === 'S') skillIdx.value = id;
-  if(type === 'A') artifactIdx.value = id;
-  instance.get('detail', {params: {idx}})
-  .then((response)=> {
-    details.value = response.data;
-    isClick.value = !isClick.value;
-  })
-  .catch((error)=> {
-    console.log(error);
-    
-  })
-  .finally(()=> {
-
-  })
+const detailOpen = (idx) =>{
+  selectedId.value = idx
+  isClick.value = true;
+  
   
 }
 
