@@ -6,7 +6,7 @@
       <!-- 로고 -->
       <div class="flex items-center gap-2">
         <ScrollText class="h-6 w-6 text-amber-500" />
-        <span class="text-xl font-bold">Lord of Heroes</span>
+        <span class="text-xl font-bold">로드 아카이브</span>
       </div>
 
       <!-- 가운데 메인 내비게이션 -->
@@ -25,7 +25,9 @@
           class="text-sm font-medium hover:text-amber-500">
           문의
         </button>
-        <ContactPopup v-if="isOpen" @close="isOpen = false"></ContactPopup>       
+        <ContactPopup v-if="isOpen" @close="isOpen = false"></ContactPopup>         
+        <!-- @close="isOpen = false" -->
+
       </div>
 
     </div>
@@ -37,8 +39,9 @@
   import { ScrollText } from 'lucide-vue-next'
   import  ContactPopup from '../components/popup/ContactPopup.vue'
 
-  const isOpen = ref(false);
 
+  const isOpen = ref(false);
+  
 
   </script>
     

@@ -74,6 +74,83 @@
                   </div>
                 </div>
               </div>
+              <div class="mt-4 border-t border-gray-800 pt-4">
+                <button
+                  @click="toggleHistory(chara.id)"
+                  class="flex items-center justify-between w-full text-left hover:text-purple-400 transition-colors"
+                >
+                  <span class="text-sm font-medium flex items-center">
+                    <History class="h-4 w-4 mr-2 text-purple-500" />
+                    <!-- Rerun History ({{ character.rerunHistory.length }} appearances) -->
+                  </span>
+                  <!-- <ChevronDown v-if="!expandedHistory.has(character.id)" class="h-4 w-4" />
+                  <ChevronUp v-else class="h-4 w-4" /> -->
+                </button>
+                <!-- v-if="expandedHistory.has(chara.id) -->
+                <div class="mt-3 space-y-3">
+                  <!-- <div
+                   v-for="(rerun, index) in character.rerunHistory" 
+                    :key="index"
+                    class="bg-gray-800 rounded-lg p-3"
+                  >
+                    <div class="flex items-center justify-between mb-2">
+                      <div class="flex items-center gap-2">
+                        <span class="text-sm font-medium">Version {{ rerun.version }}</span>
+                        <span
+                          :class="rerun.type === 'Release' ? 'bg-green-900 text-green-200' : 'bg-blue-900 text-blue-200'"
+                          class="px-2 py-0.5 rounded text-xs font-medium"
+                        >
+                          {{ rerun.type }}
+                        </span>
+                      </div>
+                      <span class="text-xs text-gray-400">{{ rerun.duration }}</span>
+                    </div>
+
+                    <div class="flex items-center justify-between text-sm">
+                      <span class="text-gray-300">{{ formatDate(rerun.date) }}</span>
+                      <span class="text-gray-500">
+                        {{ rerun.type === 'Release' ? 'Initial release' : `${getDaysSince(rerun.date)} days ago` }}
+                      </span>
+                    </div>
+
+                    <div
+                      v-if="index === character.rerunHistory.length - 1 && !character.isAlwaysAvailable"
+                      class="mt-2 pt-2 border-t border-gray-700"
+                    >
+                      <div class="text-xs text-purple-400">
+                        Gap since last appearance: {{ getDaysSince(rerun.date) }} days
+                      </div>
+                    </div>
+                  </div> -->
+                  <!-- v-if="!character.isAlwaysAvailable" -->
+                  <!-- Predicted Next Appearance -->
+                  <div
+                    
+                    class="bg-gray-800/50 rounded-lg p-3 border-2 border-dashed border-gray-700"
+                  >
+                    <div class="flex items-center justify-between mb-2">
+                      <div class="flex items-center gap-2">
+                        <span class="text-sm font-medium text-yellow-400">Predicted Next</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-medium bg-yellow-900 text-yellow-200">
+                          Prediction
+                        </span>
+                      </div>
+                      <span class="text-xs text-gray-400">~14 days</span>
+                    </div>
+
+                    <div class="flex items-center justify-between text-sm">
+                      <!-- <span class="text-yellow-400">{{ formatDate(character.predictedRerun) }}</span> -->
+                      <span class="text-gray-500">
+                        <!-- {{
+                          getDaysUntil(character.predictedRerun) > 0
+                            ? `In ${getDaysUntil(character.predictedRerun)} days`
+                            : `${Math.abs(getDaysUntil(character.predictedRerun))} days overdue`
+                        }} -->
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
           </div>
         </div>
       </section>

@@ -17,7 +17,7 @@
                 <!-- Header -->
                 <div class="border-b border-gray-200 px-6 py-4">
                     <div class="flex items-center justify-between">
-                    <h2 class="text-2xl font-bold text-gray-900">Character Details</h2>
+                    <h2 class="text-2xl font-bold text-gray-900">상세정보</h2>
                     <button
                         @click="$emit('close')"
                         class="text-gray-400 hover:text-gray-600 focus:outline-none"
@@ -91,37 +91,32 @@
                         <div class="flex-1 space-y-4">
                             <!-- Personal Information -->
                             <div class="bg-white border border-gray-200 rounded-lg">
-                            <div class="border-b border-gray-200 px-4 py-3">
-                                <h4 class="flex items-center gap-2 font-semibold">
-                                <User class="w-5 h-5 text-blue-500" />
-                                Personal Information
-                                </h4>
-                            </div>
+                                <div class="border-b border-gray-200 px-4 py-3">
+                                    <h4 class="flex items-center gap-2 font-semibold">
+                                    <User class="w-5 h-5 text-blue-500" />
+                                    Personal Information
+                                    </h4>
+                                </div>
                             <div class="p-4">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="space-y-3">
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">나이:</span>
-                                        <span class="font-medium">{{ characterDetail.age }}</span>
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">나이:</span>
+                                            <span class="font-medium">{{ characterDetail.age }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">신장:</span>
+                                            <span class="font-medium">{{ characterDetail.height }}cm</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">캐릭터 보이스(KR):</span>
+                                            <span class="font-medium">{{ characterDetail.voice }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">실장일:</span>
+                                            <span class="font-medium">{{ characterDetail.release_date }}</span>
+                                        </div>
                                     </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">신장:</span>
-                                        <span class="font-medium">{{ characterDetail.height }}</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">캐릭터 보이스(KR):</span>
-                                        <span class="font-medium">{{ characterDetail.voice }}</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">실장일:</span>
-                                        <span class="font-medium">{{ characterDetail.release_date }}</span>
-                                    </div>
-                                    
-                                    <!-- <div class="flex justify-between">
-                                        <span class="text-gray-600">Zodiac:</span>
-                                        <span class="font-medium">{{ characterData.personalInfo.zodiac }}</span>
-                                    </div> -->
-                                </div>
                                 <div class="space-y-3">
                                     <div class="flex justify-between">
                                         <span class="text-gray-600">생일:</span>
@@ -134,6 +129,10 @@
                                     <div class="flex justify-between">
                                         <span class="text-gray-600">캐릭터 보이스(JP):</span>
                                         <span class="font-medium">{{ characterDetail.voice_jp }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">MBTI:</span>
+                                        <span class="font-medium">{{ characterDetail.mbti }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -236,51 +235,91 @@
                                 </h4>
                             </div>
                             <div class="p-4 space-y-4">
-                                <div>
-                                <h5 class="font-semibold mb-2">포지션</h5>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="px-2 py-1 bg-gray-100 border border-gray-300 rounded-md text-sm"
+
+                                 <!-- Position Information -->
+                            <div>
+                                <h5 class="font-semibold mb-2">Position</h5>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span
+                                        :class="[
+                                        'px-3 py-1 rounded-full text-sm font-medium',
+                                        getElementColor(characterDetail.element_id)
+                                        ]"
                                     >
-                                    {{ characterDetail.element_name }} {{ characterDetail.job_name }}
+                                        {{ characterDetail.element_name }} {{ characterDetail.job_name }}
                                     </span>
                                 </div>
-                                </div>
+                            </div>
+
+                            <!-- 습득방법 -->
+                            <div>
+                                <h5 class="font-semibold mb-2">획득방법</h5>
+                                <ul class="text-sm space-y-2">
+                                    <li
+                                        class="flex items-start gap-2"
+                                    >
+                                        <div class="mt-1 w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                                        <div>
+                                            <span class="font-medium">{{enumMap.summon[characterDetail.summonType]}}</span>
+                                            <span class="text-gray-600">{{enumMap.acqusition[characterDetail.acquisitionMethodType]}}</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                                <!-- <div>
+                                    <h5 class="font-semibold mb-2">포지션</h5>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-2 py-1 bg-gray-100 border border-gray-300 rounded-md text-sm"
+                                        >
+                                        {{ characterDetail.element_name }} {{ characterDetail.job_name }}
+                                        </span>
+                                    </div>
+                                </div> -->
+                                <!-- <div>
+                                    <h5 class="font-semibold mb-2">획득처</h5>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-2 py-1 bg-gray-100 border border-gray-300 rounded-md text-sm"
+                                        >
+                                        {{ characterDetail.element_name }} {{ characterDetail.job_name }}
+                                        </span>
+                                    </div>
+                                </div> -->
         
                                 <div class="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                        <h5 class="font-semibold mb-2 text-green-600">좋아하는 음식</h5>
+                                        <ul class="text-sm space-y-1">
+                                            <li
+                                                v-for="favoriteFood in characterDetail.favorite_food"
+                                                :key="favoriteFood"
+                                                class="flex items-center gap-2"
+                                            >
+                                                <div class="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                                                {{ favoriteFood }}
+                                            </li>
+                                        </ul>
+                                    </div>
                                 <div>
-                                    <h5 class="font-semibold mb-2 text-green-600">좋아하는 음식</h5>
+                                    <h5 class="font-semibold mb-2 text-blue-600">중요하게 생각하는 것</h5>
                                     <ul class="text-sm space-y-1">
-                                    <li
-                                        v-for="favoriteFood in characterDetail.favorite_food"
-                                        :key="favoriteFood"
-                                        class="flex items-center gap-2"
-                                    >
-                                        <div class="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                                        {{ favoriteFood }}
-                                    </li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h5 class="font-semibold mb-2 text-orange-600">중요하게 생각하는 것</h5>
-                                    <ul class="text-sm space-y-1">
-                                    <li
-                                        v-for="imVal in characterDetail.important_value"
-                                        :key="imVal"
-                                        class="flex items-center gap-2"
-                                    >
-                                        <div class="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
-                                        {{ imVal }}
-                                    </li>
+                                        <li
+                                            v-for="imVal in characterDetail.important_value"
+                                            :key="imVal"
+                                            class="flex items-center gap-2"
+                                        >
+                                            <div class="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                                            {{ imVal }}
+                                        </li>
                                     </ul>
                                 </div>
                                 </div>
         
-                                <!-- <div>
+                                <div>
                                     <h5 class="font-semibold mb-2">Background Story</h5>
                                     <p class="text-sm text-gray-600 leading-relaxed">
-                                        {{ characterDetail.background.backstory }}
+                                        {{ characterDetail.description }}
                                     </p>
-                                </div> -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -290,131 +329,131 @@
                     <!-- Skills Tab -->
                     <!-- Skills Tab -->
                         <div v-if="activeTab === 'skills'" class="space-y-4">
-                        <div
-                            v-for="skill in skillList"
-                            :key="skill.id"
-                            class="bg-white border border-gray-200 rounded-lg"
-                        >
-                            <div class="border-b border-gray-200 px-4 py-3">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                <img
-                                    :src="skill.image || '/placeholder.svg?height=48&width=48&text=⚡'"
-                                    :alt="skill.name"
-                                    class="w-12 h-12 rounded-lg border-2 border-gray-300 object-cover"
-                                />
-                                <div class="flex items-center gap-2">
-                                    <h4 class="font-semibold">{{ skill.name }}</h4>
-                                    <span
-                                    :class="[
-                                        'px-2 py-1 rounded-md text-xs font-medium',
-                                        skill.type === 'AC'
-                                        ? 'bg-blue-100 text-blue-800'
-                                        : 'bg-gray-100 text-gray-800'
-                                    ]"
-                                    >
-                                    {{ enumMap.skill[skill.type] }}
-                                    </span>
+                            <div
+                                v-for="skill in skillList"
+                                :key="skill.id"
+                                class="bg-white border border-gray-200 rounded-lg"
+                            >
+                                <div class="border-b border-gray-200 px-4 py-3">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-3">
+                                            <img
+                                                :src="skill.image || '/placeholder.svg?height=48&width=48&text=⚡'"
+                                                :alt="skill.name"
+                                                class="w-12 h-12 rounded-lg border-2 border-gray-300 object-cover"
+                                            />
+                                            <div class="flex items-center gap-2">
+                                                <h4 class="font-semibold">{{ skill.name }}</h4>
+                                                <span
+                                                :class="[
+                                                    'px-2 py-1 rounded-md text-xs font-medium',
+                                                    skill.type === 'AC'
+                                                    ? 'bg-blue-100 text-blue-800'
+                                                    : 'bg-gray-100 text-gray-800'
+                                                ]"
+                                                >
+                                                {{ enumMap.skill[skill.type] }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm text-gray-600">
+                                                <!-- 쿨타임 :{{ skill.cooldown }}/{{ skill.slot }} -->
+                                            </span>
+                                        <!-- <div class="flex">
+                                            <Star
+                                                v-for="i in skill.maxLevel"
+                                                :key="i"
+                                                :class="[
+                                                'w-4 h-4',
+                                                i <= skill.level
+                                                    ? 'text-yellow-400 fill-current'
+                                                    : 'text-gray-300'
+                                                ]"
+                                            /> 
+                                            </div>-->
+                                        </div>
+                                    </div>
                                 </div>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                <span class="text-sm text-gray-600">
-                                    <!-- 쿨타임 :{{ skill.cooldown }}/{{ skill.slot }} -->
-                                </span>
-                                <!-- <div class="flex">
-                                <Star
-                                    v-for="i in skill.maxLevel"
-                                    :key="i"
-                                    :class="[
-                                    'w-4 h-4',
-                                    i <= skill.level
-                                        ? 'text-yellow-400 fill-current'
-                                        : 'text-gray-300'
-                                    ]"
-                                /> 
-                                </div>-->
+                                <div class="p-4">
+                                    <p class="text-gray-600 mb-3">{{ skill.s_desc }}</p>
+                                    <div class="flex gap-4 text-sm">
+                                        <div v-if="skill.cooldown" class="flex items-center gap-1">
+                                            <span class="text-gray-600">Cooldown:</span>
+                                            <span>{{ skill.cooldown }}</span>
+                                        </div>
+                                        <div v-if="skill.slot" class="flex items-center gap-1">
+                                            <span class="text-gray-600">Mana Cost:</span>
+                                            <span>{{ skill.slot }}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            </div>
-                            <div class="p-4">
-                            <p class="text-gray-600 mb-3">{{ skill.s_desc }}</p>
-                            <div class="flex gap-4 text-sm">
-                                <div v-if="skill.cooldown" class="flex items-center gap-1">
-                                <span class="text-gray-600">Cooldown:</span>
-                                <span>{{ skill.cooldown }}</span>
-                                </div>
-                                <div v-if="skill.slot" class="flex items-center gap-1">
-                                <span class="text-gray-600">Mana Cost:</span>
-                                <span>{{ skill.slot }}</span>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
                         </div>
 
                         <!-- Artifacts Tab -->
                         <div v-if="activeTab === 'artifacts'" class="space-y-4">
-                        <div
-                            v-for="artifact in artifactList"
-                            :key="artifact.id"
-                            :class="[
-                            'bg-white rounded-lg border-2',
-                            getRarityColor(artifact.type)
-                            ]"
-                        >
-                            <div class="border-b border-gray-200 px-4 py-3">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                <img
-                                    :src="artifact.image || '/placeholder.svg?height=64&width=64&text=🎯'"
-                                    :alt="artifact.name"
-                                    :class="[
-                                    'w-16 h-16 rounded-lg border-2 object-cover',
-                                    getRarityColor(artifact.type).replace('text-', 'border-')
-                                    ]"
-                                />
-                                <div>
-                                    <div class="flex items-center gap-2">
-                                    <h4 class="font-semibold">{{ artifact.name }}</h4>
-                                    <span
-                                        :class="[
-                                        'px-2 py-1 rounded-md text-xs font-medium border',
-                                        getRarityColor(artifact.type)
-                                        ]"
-                                    >
-                                        {{ enumMap.artifact[artifact.type] }}
-                                    </span>
+                            <div
+                                v-for="artifact in artifactList"
+                                :key="artifact.id"
+                                :class="[
+                                'bg-white rounded-lg border-2',
+                                getRarityColor(artifact.type)
+                                ]"
+                            >
+                                <div class="border-b border-gray-200 px-4 py-3">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-3">
+                                            <img
+                                                :src="artifact.image || '/placeholder.svg?height=64&width=64&text=🎯'"
+                                                :alt="artifact.name"
+                                                :class="[
+                                                'w-16 h-16 rounded-lg border-2 object-cover',
+                                                getRarityColor(artifact.type).replace('text-', 'border-')
+                                                ]"
+                                            />
+                                            <div>
+                                                <div class="flex items-center gap-2">
+                                                    <h4 class="font-semibold">{{ artifact.name }}</h4>
+                                                    <span
+                                                        :class="[
+                                                        'px-2 py-1 rounded-md text-xs font-medium border',
+                                                        getRarityColor(artifact.type)
+                                                        ]"
+                                                    >
+                                                        {{ enumMap.artifact[artifact.type] }}
+                                                    </span>
+                                                </div>
+                                                <p class="text-gray-600 text-sm">
+                                                {{ enumMap.artifact[artifact.type] }}
+                                                <!-- • Level {{ artifact.level }} -->
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <p class="text-gray-600 text-sm">
-                                    {{ enumMap.artifact[artifact.type] }}
-                                    <!-- • Level {{ artifact.level }} -->
-                                    </p>
                                 </div>
-                                </div>
-                            </div>
-                            </div>
-                            <div class="p-4">
-                            <p class="text-sm text-gray-600 mb-3">{{ artifact.a_desc }}</p>
-                            <!-- <hr class="border-gray-200 my-3" /> -->
-                            <div class="grid grid-cols-2 gap-2">
-                                <div
-                                v-for="(value, stat) in artifact.stats"
-                                :key="stat"
-                                class="flex justify-between"
-                                >
-                                <span class="text-gray-600 capitalize">
-                                    {{ stat.replace(/([A-Z])/g, ' $1').trim() }}:
-                                </span>
-                                <span class="font-semibold text-green-600">{{ value }}</span>
+                                <div class="p-4">
+                                    <p class="text-sm text-gray-600 mb-3">{{ artifact.a_desc }}</p>
+                                    <!-- <hr class="border-gray-200 my-3" /> -->
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div
+                                        v-for="(value, stat) in artifact.stats"
+                                        :key="stat"
+                                        class="flex justify-between"
+                                        >
+                                            <span class="text-gray-600 capitalize">
+                                                {{ stat.replace(/([A-Z])/g, ' $1').trim() }}:
+                                            </span>
+                                            <span class="font-semibold text-green-600">{{ value }}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            </div>
-                        </div>
                         </div>
                     </div>
                 </div>
-                </div>
             </div>
+        </div>
             <!-- </div> -->
 
     </teleport>
@@ -438,9 +477,9 @@
   const artifactList = ref({});
   
   const tabs = [
-    { id: 'character', name: 'Character', icon: User },
-    { id: 'skills', name: 'Skills', icon: Zap },
-    { id: 'artifacts', name: 'Artifacts', icon: Sword }
+    { id: 'character', name: '캐릭터', icon: User },
+    { id: 'skills', name: '스킬', icon: Zap },
+    { id: 'artifacts', name: '아티팩트', icon: Sword }
   ]
 
   const characterDetails = (idx) =>{
@@ -479,6 +518,22 @@
     
   })
   
+  const getElementColor =(elementId) =>{
+    switch(elementId) {
+        case 1 :
+            return "border-blue-600 bg-blue-300"
+        case 2 :
+            return "border-red-600 bg-red-300"
+        case 3 :
+            return "border-green-600 bg-green-300"
+        case 4 :
+            return "border-yellow-600 bg-yellow-300"
+        case 5 :
+            return "border-purple-600 bg-purple-300"
+        default :
+            return "border-gray-600 bg-gray-300"
+    }
+  }
 
   const getRarityColor = (rarity) => {
     switch (rarity) {
@@ -492,6 +547,7 @@
         return "border-gray-500 text-gray-600"
     }
   }
+    
   </script>
   
   <style scoped>
