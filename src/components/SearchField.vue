@@ -1,33 +1,49 @@
 <template>
   <div class="flex min-h-screen flex-col bg-white text-gray-900">
     
-
     <!-- Main Content -->
     <main class="flex-1">
       <!-- Search Hero Section -->
       <section class="w-full py-12 md:py-16 bg-gradient-to-b from-gray-50 to-white border-b border-gray-200">
         <div class="container mx-auto px-4 md:px-6">
-          <div class="max-w-4xl mx-auto text-center">
+          <div class="max-w-6xl` mx-auto text-center">
             <h1 class="text-3xl font-bold tracking-tighter sm:text-5xl mb-6">
               <span class="text-amber-500">로드</span> 아카이브
             </h1>
-            <!-- <p class="text-gray-600 md:text-xl mb-8">
-              Find heroes, guides, and community content for the epic mobile RPG.
-            </p> -->
-            <form @submit.prevent="handleSearch" class="relative w-full">
-              <Search class="absolute left-4 top-1/2 transform -translate-y-1/2 h-6 w-6 text-amber-500" />
-              <input
-                type="search"
-                placeholder="검색"
-                class="w-full rounded-md pl-14 pr-32 py-6 text-lg bg-white border border-gray-300 focus:border-amber-500 focus:outline-none text-gray-900 shadow-sm"
-                v-model="searchQuery"/>
+          
+            <form @submit.prevent="handleSearch" class="flex items-center justify-center w-full max-w-6xl mx-auto gap-3">
+              <!-- 리셋 버튼 -->
+              <button
+                type="button"
+                @click="resetSearch"
+                class="h-14 w-14 flex-shrink-0 flex items-center justify-center bg-white hover:bg-gray-100 border border-gray-300 text-gray-500 rounded-md transition-colors"
+                title="초기화"
+              >
+                <ListRestart class="text-gray-700 w-6 h-6" />
+              </button>
+
+              <!-- 검색 입력창 -->
+              <div class="relative flex-1">
+                <Search class="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-amber-500" />
+                <input
+                  type="search"
+                  placeholder="검색"
+                  class="w-full h-14 pl-12 pr-4 text-base bg-white border border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-200 text-gray-900 shadow-sm rounded-md"
+                  v-model="searchQuery"
+                />
+              </div>
+
+              <!-- 검색 버튼 -->
               <button
                 type="submit"
-                class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-md font-medium"
+                class="h-14 px-6 flex-shrink-0 bg-amber-500 hover:bg-amber-600 text-white rounded-md font-medium text-base flex items-center justify-center whitespace-nowrap"
               >
                 검색
               </button>
             </form>
+
+
+            <!-- 태그 -->
             <!-- <div class="flex flex-wrap justify-center gap-2 mt-4">
               <span class="text-sm text-gray-600">Popular searches:</span>
               <span
@@ -49,7 +65,7 @@
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
               <h2 class="text-2xl font-bold tracking-tighter sm:text-3xl">
-                Search Results {{ searchQuery ? `for "${searchQuery}"` : "" }}
+                 {{ searchQuery ? `"${searchQuery}"에 대한 결과` : "" }}
               </h2>
               <p class="text-gray-600 mt-1">
                 
@@ -91,7 +107,7 @@
           </div> -->
 
           <!-- 검색 결과 -->
-          <div class="mb-10">
+          <div class="w-full py-8 md:py-12">
 
             <!-- 캐릭터 -->
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4" v-if="characters?.length">
@@ -240,7 +256,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { Search } from 'lucide-vue-next'
+import { Search, ListRestart } from 'lucide-vue-next'
 import instance from '../api/axiosInstance.js'
 import  { enumMap } from "../constants/enumsMap.js";
 import CharaDetailPopup from "./popup/CharacterDetailPopup.vue";
@@ -268,9 +284,6 @@ const handleSearch = () => {
     artifacts.value = response.data.artifacts;  
     characters.value = response.data.characters;  
     skills.value = response.data.skills;
-    // console.log(artifacts);
-    // console.log(characters);
-    // console.log(skills);
   })
   .catch((error)=> {
     // 에러
@@ -279,6 +292,10 @@ const handleSearch = () => {
   .finally(()=> {
     
   });
+}
+
+const resetSearch = () => {
+  searchQuery.value = ''
 }
 
 const detailOpen = (idx) =>{

@@ -15,7 +15,7 @@
           로드 아카이브
         </router-link>
         <router-link to="/rerun" class="text-lg font-bold hover:text-amber-500">
-          복각 캘린더
+          실장 기록실
         </router-link>
       </nav>
 
