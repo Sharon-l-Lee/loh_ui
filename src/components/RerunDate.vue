@@ -50,7 +50,6 @@
             <div class="max-w-6xl mx-auto space-y-3">
               <!-- 메인 필터 -->
               <div class="flex flex-wrap justify-center gap-2">
-              
                 <!-- 속성 필터 -->
                 <div class="relative" ref="elementDropdown">
                   <button
@@ -58,7 +57,6 @@
                     @click="toggleDropdown('element')"
                     class="h-9 px-3 py-1 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 rounded-md text-sm font-medium transition-colors flex items-center gap-2"
                   >
-                    <span class="text-base">💧</span>
                     속성
                     <span v-if="selectedElements.length > 0" class="bg-blue-200 text-blue-800 px-1.5 py-0.5 rounded text-xs">
                       {{ selectedElements.length }}
@@ -72,7 +70,7 @@
                     <div class="p-1">
                       <label 
                         v-for="element in elements" 
-                        :key="element.value"
+                        :key="element.id"
                         class="flex items-center px-2 py-1.5 hover:bg-gray-50 rounded cursor-pointer"
                       >
                         <input
@@ -81,8 +79,7 @@
                           v-model="selectedElements"
                           class="mr-2 rounded border-gray-300"
                         />
-                        <span class="text-base mr-2">{{ element.icon }}</span>
-                        <span class="text-sm">{{ element.label }}</span>
+                        <span class="text-sm">{{ element.value }}</span>
                       </label>
                     </div>
                   </div>
@@ -95,7 +92,6 @@
                     @click="toggleDropdown('job')"
                     class="h-9 px-3 py-1 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 rounded-md text-sm font-medium transition-colors flex items-center gap-2"
                   >
-                    <span class="text-base">⚔️</span>
                     직업
                     <span v-if="selectedJobs.length > 0" class="bg-purple-200 text-purple-800 px-1.5 py-0.5 rounded text-xs">
                       {{ selectedJobs.length }}
@@ -109,7 +105,7 @@
                     <div class="p-1">
                       <label 
                         v-for="job in jobs" 
-                        :key="job.value"
+                        :key="job.id"
                         class="flex items-center px-2 py-1.5 hover:bg-gray-50 rounded cursor-pointer"
                       >
                         <input
@@ -118,8 +114,7 @@
                           v-model="selectedJobs"
                           class="mr-2 rounded border-gray-300"
                         />
-                        <span class="text-base mr-2">{{ job.icon }}</span>
-                        <span class="text-sm">{{ job.label }}</span>
+                        <span class="text-sm">{{ job.value }}</span>
                       </label>
                     </div>
                   </div>
@@ -131,11 +126,10 @@
                     @click="toggleDropdown('availability')"
                     class="h-9 px-3 py-1 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 rounded-md text-sm font-medium transition-colors flex items-center gap-2"
                   >
-                    <CheckCircle class="w-4 h-4" />
                     획득 가능 여부
-                    <span v-if="selectedAvailability" class="bg-green-200 text-green-800 px-1.5 py-0.5 rounded text-xs">
+                    <!-- <span v-if="selectedAvailability" class="bg-green-200 text-green-800 px-1.5 py-0.5 rounded text-xs">
                       {{ getAvailabilityLabel(selectedAvailability) }}
-                    </span>
+                    </span> -->
                   </button>
                   <div
                     v-if="activeDropdown === 'availability'"
@@ -152,7 +146,6 @@
                           class="mr-2 rounded border-gray-300"
                         />
                         <span class="text-sm">상시</span>
-                        <span class="ml-auto text-xs text-green-600 bg-green-100 px-1.5 py-0.5 rounded">현재</span>
                       </label>
                       <label class="flex items-center px-2 py-1.5 hover:bg-gray-50 rounded cursor-pointer">
                         <input
@@ -162,8 +155,7 @@
                           @change="handleAvailabilityChange"
                           class="mr-2 rounded border-gray-300"
                         />
-                        <span class="text-sm">비상시</span>
-                        <span class="ml-auto text-xs text-orange-600 bg-orange-100 px-1.5 py-0.5 rounded">한정</span>
+                        <span class="text-sm">한정</span>
                       </label>
                       <label class="flex items-center px-2 py-1.5 hover:bg-gray-50 rounded cursor-pointer">
                         <input
@@ -174,13 +166,10 @@
                           class="mr-2 rounded border-gray-300"
                         />
                         <span class="text-sm">자동영입</span>
-                        <span class="ml-auto text-xs text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">무료</span>
                       </label>
                     </div>
                   </div>
                 </div>
-
-                
 
                 <!-- Filter Reset Button -->
                 <button
@@ -416,55 +405,20 @@ const isLoading = ref(false)
 const activeDropdown = ref(null)
 const elementsDropdown = ref(null)
 
-
 // Filter states
 const selectedElements = ref([])
 const selectedJobs = ref([])
 const availabilityFilter = ref([])
-const dateFilter = ref([])
 const filteredList = ref([])
-// const selectedResultTypes = ref(['characters', 'skills', 'artifacts'])
 const selectedAvailability = ref([])
 const selectedCurrencies = ref([])
 
 
 // Filter options
-const elements = [{id: 1, value : '물'}, {id: 2, value : '불'}, {id: 3, value : '대지'}, '빛', '어둠']
-const jobs = ['가디언', '워리어', '스트라이커', '슈터', '프리스트', '커맨더']
-const acquisition = ['상시', '복각이력있음', '복각이력없음']
+const elements = [{id: 1, value : '물'}, {id: 2, value : '불'}, {id: 3, value : '대지'},  {id: 4, value : '빛'},  {id: 5, value : '어둠'}]
+const jobs = [{id: 1, value : '가디언'}, {id: 2, value : '워리어'}, {id: 3, value : '스트라이커'}, {id: 4, value : '슈터'}, {id: 5, value : '프리스트'}, {id: 5, value : '커맨더'}]
 
-// Computed properties
-const filteredCharacters = computed(() => {
-  if (!selectedResultTypes.value.includes('characters')) return []
-  
-  return charaList.value.filter(character => {
-    // Search query filter
-    if (searchQuery.value && !character.cname.toLowerCase().includes(searchQuery.value.toLowerCase())) {
-      return false
-    }
 
-    // Availability filter
-    if (selectedAvailability.value && character.availability_type !== selectedAvailability.value) {
-      return false
-    }
-    
-    // Currency filter (상시 선택 시)
-    if (selectedAvailability.value === 'always' && selectedCurrencies.value.length > 0) {
-      if (!character.required_currency || !selectedCurrencies.value.some(currency => character.required_currency.includes(currency))) {
-        return false
-      }
-    }
-    
-    // Banner filter (비상시 선택 시)
-    if (selectedAvailability.value === 'limited' && selectedBanners.value.length > 0) {
-      if (!character.banner_type || !selectedBanners.value.some(banner => character.banner_type.includes(banner))) {
-        return false
-      }
-    }
-    
-    return true
-  })
-})
 
 const filteredSkills = computed(() => {
   if (!selectedResultTypes.value.includes('skills')) return []
@@ -478,12 +432,6 @@ const filteredArtifacts = computed(() => {
   return artifacts.value.filter(artifact => 
     !searchQuery.value || artifact.aname.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
-})
-
-const getResultCount = computed(() => {
-  return (filteredCharacters.value?.length || 0) + 
-         (filteredSkills.value?.length || 0) + 
-         (filteredArtifacts.value?.length || 0)
 })
 
 // Methods
@@ -534,38 +482,6 @@ const getAvailabilityLabel = (value) => {
   return labels[value] || value
 }
 
-const getAvailabilityBadgeClass = (type) => {
-  const classes = {
-    'always': 'bg-green-100 text-green-800',
-    'limited': 'bg-orange-100 text-orange-800',
-    'auto': 'bg-blue-100 text-blue-800'
-  }
-  return classes[type] || 'bg-gray-100 text-gray-800'
-}
-
-const getJobIcon = (jobId) => {
-  const icons = {
-    1: "🛡️",
-    2: "⚔️",
-    3: "🏹",
-    4: "🔫",
-    5: "✨",
-    6: "👑",
-  }
-  return icons[jobId] || "🛡️"
-}
-
-const getElement = (elementId) => {
-  const elements = {
-    1: "💧",
-    2: "🔥",
-    3: "🌍",
-    4: "💡",
-    5: "🌙",
-  }
-  return elements[elementId] || "💧"
-}
-
 const getActiveFilterCount = computed(() => {
   return selectedElements.value.length + selectedJobs.value.length + availabilityFilter.value.length + dateFilter.value.length
 })
@@ -610,8 +526,7 @@ const resetFilters = () => {
   searchName.value = ''
   selectedElements.value = []
   selectedJobs.value = []
-  availabilityFilter.value = []
-  dateFilter.value = []
+  availabilityFilter.value = [] 
   activeDropdown.value = null
 }
 
