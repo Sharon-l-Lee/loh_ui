@@ -7,22 +7,68 @@
             <!-- Header -->
             <div class="max-w-4xl mx-auto text-center mb-8">
               <h1 class="text-3xl font-bold tracking-tighter sm:text-5xl mb-6">
-                <span class="text-amber-500">실장</span> 기록실
+                <span class="text-amber-500">복각</span> 언제해?
               </h1>
+            </div>
+            <div class="w-full py-4 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-lg mb-6">
+              <div class="max-w-6xl mx-auto px-4">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-full flex items-center justify-center">
+                      <span class="text-white text-sm">✨</span>
+                    </div>
+                    <h2 class="text-lg font-bold text-amber-800">픽업중</h2>
+                  </div>
+                </div>
+                
+                <!-- 간소화된 픽업 캐릭터 목록 -->
+                <!-- @click="detailOpen(character.cname)"
+                    @mouseenter="showPreview(character, $event)"
+                    @mouseleave="hidePreview" -->
+                <div class="flex gap-3 overflow-x-auto pb-2">
+                  <div 
+                    v-for="character in featuredCharacters"
+                    class="flex-shrink-0 bg-white rounded-lg p-3 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer border border-amber-200 hover:border-amber-300 min-w-[200px]">
+                    <div class="flex items-center gap-3">
+                      <!-- 캐릭터 아바타 -->
+                      <div class="relative">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-yellow-500 flex items-center justify-center text-lg">
+                          {{ character.job_name }}
+                        </div>
+                        <!-- NEW 배지 -->
+                        <div v-if="!!character.isNew" class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                          <span class="text-white text-xs font-bold">N</span>
+                        </div>
+                      </div>
+                      
+                      <!-- 캐릭터 정보 -->
+                      <div class="flex-1 min-w-0">
+                        <h3 class="text-sm font-bold text-gray-800 truncate">{{ character.cname }}</h3>
+                        <div class="flex items-center gap-1 mt-1">
+                          <span class="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded">
+                            {{ character.job_name }}
+                          </span>
+                          <span class="text-xs text-gray-500"> ~ {{ character.rerun_end_date.format('YYYY년 MM월 DD일') }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <form
               class="flex items-center gap-3 w-full max-w-6xl mx-auto mb-4"
               @submit.prevent="characterList"
             >
               <!-- 초기화 버튼 -->
-              <button
+              <!-- <button
                 type="button"
                 @click="resetSearch"
                 class="h-14 w-14 flex-shrink-0 flex items-center justify-center bg-white hover:bg-gray-100 border border-gray-300 text-gray-500 rounded-md transition-colors"
                 title="초기화"
               >
                 <ListRestart class="w-6 h-6" />
-              </button>
+              </button> -->
 
               <!-- 검색창 -->
               <div class="relative flex-1">
@@ -75,7 +121,7 @@
                       >
                         <input
                           type="checkbox"
-                          :value="element.value"
+                          :value="element.id"
                           v-model="selectedElements"
                           class="mr-2 rounded border-gray-300"
                         />
@@ -110,7 +156,7 @@
                       >
                         <input
                           type="checkbox"
-                          :value="job.value"
+                          :value="job.id"
                           v-model="selectedJobs"
                           class="mr-2 rounded border-gray-300"
                         />
@@ -119,59 +165,42 @@
                     </div>
                   </div>
                 </div>
-                <!-- 획득 가능 여부 -->
-                <div class="relative" ref="availabilityDropdown">
+                <!-- 획득 경로 -->
+                <div class="relative" ref="routeDropdown">
                   <button
                     type="button"
-                    @click="toggleDropdown('availability')"
+                    @click="toggleDropdown('route')"
                     class="h-9 px-3 py-1 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 rounded-md text-sm font-medium transition-colors flex items-center gap-2"
                   >
-                    획득 가능 여부
-                    <!-- <span v-if="selectedAvailability" class="bg-green-200 text-green-800 px-1.5 py-0.5 rounded text-xs">
-                      {{ getAvailabilityLabel(selectedAvailability) }}
-                    </span> -->
+                    획득 경로
+                    <span v-if="selectedRoutes.length > 0" class="bg-blue-200 text-blue-800 px-1.5 py-0.5 rounded text-xs">
+                      {{ selectedRoutes.length }}
+                    </span>
                   </button>
                   <div
-                    v-if="activeDropdown === 'availability'"
-                    class="absolute top-full left-0 mt-1 w-56 bg-white border border-gray-200 rounded-md shadow-lg z-10"
+                    v-if="activeDropdown === 'route'"
+                    class="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10"
                   >
-                    <div class="p-2 border-b border-gray-100 text-sm font-medium text-gray-700">획득 가능 여부</div>
+                    <div class="p-2 border-b border-gray-100 text-sm font-medium text-gray-700">속성 선택</div>
                     <div class="p-1">
-                      <label class="flex items-center px-2 py-1.5 hover:bg-gray-50 rounded cursor-pointer">
+                      <label 
+                        v-for="route in routes" 
+                        :key="route.id"
+                        class="flex items-center px-2 py-1.5 hover:bg-gray-50 rounded cursor-pointer"
+                      >
                         <input
-                          type="radio"
-                          value="always"
-                          v-model="selectedAvailability"
-                          @change="handleAvailabilityChange"
+                          type="checkbox"
+                          :value="route.label"
+                          v-model="selectedRoutes"
                           class="mr-2 rounded border-gray-300"
                         />
-                        <span class="text-sm">상시</span>
-                      </label>
-                      <label class="flex items-center px-2 py-1.5 hover:bg-gray-50 rounded cursor-pointer">
-                        <input
-                          type="radio"
-                          value="limited"
-                          v-model="selectedAvailability"
-                          @change="handleAvailabilityChange"
-                          class="mr-2 rounded border-gray-300"
-                        />
-                        <span class="text-sm">한정</span>
-                      </label>
-                      <label class="flex items-center px-2 py-1.5 hover:bg-gray-50 rounded cursor-pointer">
-                        <input
-                          type="radio"
-                          value="auto"
-                          v-model="selectedAvailability"
-                          @change="handleAvailabilityChange"
-                          class="mr-2 rounded border-gray-300"
-                        />
-                        <span class="text-sm">자동영입</span>
+                        <span class="text-sm">{{ route.value }}</span>
                       </label>
                     </div>
                   </div>
                 </div>
 
-                <!-- Filter Reset Button -->
+                <!-- 초기화 버튼 -->
                 <button
                   type="button"
                   @click="resetFilters"
@@ -180,71 +209,27 @@
                   <X class="w-4 h-4" />
                   필터 초기화
                 </button>
-                <!-- v-if="getActiveFilterCount() > 0" -->
-                <!-- Active Filter Count -->
-                <div class="flex items-center text-sm text-gray-500">
-                  <!-- <span>{{ getActiveFilterCount() }}개 필터 적용됨</span> -->
-                </div>
-              </div>
-
-              <!-- Sub-filters: 상시 선택 시 - 재화 (인라인) -->
-              <div v-if="selectedAvailability === 'always'" class="flex flex-wrap justify-center gap-2 animate-fadeIn">
-                <div class="flex items-center text-xs text-blue-600 font-medium mr-2">
-                  <ChevronRight class="w-3 h-3 mr-1" />
-                  필요 재화:
-                </div>
-                <button
-                  v-for="currency in currencies"
-                  :key="currency.value"
-                  @click="toggleCurrency(currency.value)"
-                  :class="[
-                    'h-8 px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 flex items-center gap-1',
-                    selectedCurrencies.includes(currency.value)
-                      ? 'bg-blue-500 text-white shadow-md transform scale-105'
-                      : 'bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100'
-                  ]"
-                >
-                  <span>{{ currency.icon }}</span>
-                  <span>{{ currency.label }}</span>
-                </button>
-              </div>
-
-              <!-- Sub-filters: 비상시 선택 시 - 배너 (인라인) -->
-              <div v-if="selectedAvailability === 'limited'" class="flex flex-wrap justify-center gap-2 animate-fadeIn">
-                <div class="flex items-center text-xs text-orange-600 font-medium mr-2">
-                  <ChevronRight class="w-3 h-3 mr-1" />
-                  배너 타입:
-                </div>
-                <button
-                  v-for="banner in banners"
-                  :key="banner.value"
-                  @click="toggleBanner(banner.value)"
-                  :class="[
-                    'h-8 px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 flex items-center gap-1',
-                    selectedBanners.includes(banner.value)
-                      ? 'bg-orange-500 text-white shadow-md transform scale-105'
-                      : 'bg-orange-50 text-orange-700 border border-orange-200 hover:bg-orange-100'
-                  ]"
-                >
-                  <span>{{ banner.icon }}</span>
-                  <span>{{ banner.label }}</span>
-                </button>
-              </div>
-
-              <!-- Sub-filters: 자동영입 선택 시 - 안내 메시지 -->
-              <div v-if="selectedAvailability === 'auto'" class="flex justify-center animate-fadeIn">
-                <div class="flex items-center text-xs text-blue-600 bg-blue-50 px-3 py-2 rounded-full border border-blue-200">
-                  <CheckCircle class="w-4 h-4 mr-2" />
-                  스토리를 통해 무료로 획득 가능한 캐릭터입니다
+                
+                <!-- filter count -->
+                <div v-if="getActiveFilterCount > 0" class="flex items-center text-sm text-gray-500">
+                  <span>{{ getActiveFilterCount }}개 필터 적용됨</span>
                 </div>
               </div>
             </div>
-          </section> 
 
-      
+            <!-- info문구 -->
+            <div class="mt-5 text-center">
+              <p class="text-sm text-gray-500">
+                * 상시 출현 중인 캐릭터는 등장하지 않습니다.
+              </p>
+              <p class="text-sm text-gray-500">
+                * 복각 일정은 공식 발표를 기준으로 하며, 예측 정보는 참고용입니다
+              </p>
+            </div>
+          </section> 
           <!-- 결과 list -->
           <section>
-            <div class="w-full space-y-4 mx-auto">
+            <div class="w-full space-y-4 mx-auto mt-10 mb-20">
               <div v-if="isLoading" class="text-center py-8">
                 <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
                 <p class="mt-2 text-gray-600">캐릭터 정보를 불러오는 중...</p>
@@ -256,7 +241,7 @@
               </div>
   
               <div v-else v-for="chara in charaList" :key="chara.id" class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <!-- Character Info -->
+                <!-- 메인 캐릭터 정보 -->
                 <div class="p-4 flex items-center">
                   <img 
                     :src="chara.img_url"
@@ -278,7 +263,7 @@
                       </div>
                       
                       <div v-if="!isSameDay(chara.release_date, chara.rerun_start_date)" class="flex items-center text-sm">
-                        <span class="text-gray-500 w-16">최근 복각기간:</span>
+                        <span class="text-gray-500 w-20">최근 복각일:</span>
                         <span class="font-medium text-amber-600">{{ chara.rerun_start_date.format('YYYY년 MM월 DD일') }}</span>
                         <span v-if="chara.rerun_end_date" class="text-gray-400 ml-2">
                           ~ {{ chara.rerun_end_date.format('YYYY년 MM월 DD일') }}
@@ -375,23 +360,15 @@
                 </div>
               </div>
             </div>
-  
-            <!-- Footer Note -->
-            <div class="mt-8 text-center">
-              <p class="text-sm text-gray-500">
-                * 복각 일정은 공식 발표를 기준으로 하며, 예측 정보는 참고용입니다
-              </p>
-            </div>
           </section>
-          </div>
-       
+        </div>   
       </main>
     </div>
   </template>
   
 <script setup>
-import { ref, onMounted,computed } from 'vue'
-import { Search, ListRestart, History, ChevronDown } from 'lucide-vue-next'
+import { ref, onMounted, computed } from 'vue'
+import { Search, ListRestart, History, ChevronDown, CheckCircle, X , ChevronLeft, ChevronRight} from 'lucide-vue-next'
 import instance from '../api/axiosInstance.js'
 import dayjs from 'dayjs'
 
@@ -403,142 +380,38 @@ const searchName = ref('')
 const hasExpanded = ref(new Set())
 const isLoading = ref(false)
 const activeDropdown = ref(null)
-const elementsDropdown = ref(null)
 
 // Filter states
 const selectedElements = ref([])
 const selectedJobs = ref([])
-const availabilityFilter = ref([])
-const filteredList = ref([])
-const selectedAvailability = ref([])
-const selectedCurrencies = ref([])
+const selectedRoutes = ref([])
+const acquisitonAlways = ref([])
+const acquisitonLimited = ref([])
+
+// Pickup states
+const featuredCharacters = ref([])
+const currentPickupIndex = ref(0)
+const pickupItemsPerPage = 3
 
 
 // Filter options
 const elements = [{id: 1, value : '물'}, {id: 2, value : '불'}, {id: 3, value : '대지'},  {id: 4, value : '빛'},  {id: 5, value : '어둠'}]
 const jobs = [{id: 1, value : '가디언'}, {id: 2, value : '워리어'}, {id: 3, value : '스트라이커'}, {id: 4, value : '슈터'}, {id: 5, value : '프리스트'}, {id: 5, value : '커맨더'}]
-
-
-
-const filteredSkills = computed(() => {
-  if (!selectedResultTypes.value.includes('skills')) return []
-  return skills.value.filter(skill => 
-    !searchQuery.value || skill.sname.toLowerCase().includes(searchQuery.value.toLowerCase())
-  )
-})
-
-const filteredArtifacts = computed(() => {
-  if (!selectedResultTypes.value.includes('artifacts')) return []
-  return artifacts.value.filter(artifact => 
-    !searchQuery.value || artifact.aname.toLowerCase().includes(searchQuery.value.toLowerCase())
-  )
-})
+const routes = [{id: 1, value : '소환', label:'SUMM'}, {id: 2, value : '이벤트', label:'EVET'}, {id: 3, value : '패키지', label:'PACK'}]
 
 // Methods
-const handleSearch = () => {
-  isLoading.value = true
-  // Simulate API call
-  setTimeout(() => {
-    isLoading.value = false
-  }, 1000)
-}
-
-
-const handleAvailabilityChange = () => {
-  selectedCurrencies.value = []
-  selectedBanners.value = []
-  activeDropdown.value = null
-}
-
-const toggleCurrency = (currency) => {
-  const index = selectedCurrencies.value.indexOf(currency)
-  if (index > -1) {
-    selectedCurrencies.value.splice(index, 1)
-  } else {
-    selectedCurrencies.value.push(currency)
-  }
-}
-
-const toggleBanner = (banner) => {
-  const index = selectedBanners.value.indexOf(banner)
-  if (index > -1) {
-    selectedBanners.value.splice(index, 1)
-  } else {
-    selectedBanners.value.push(banner)
-  }
-}
-const detailOpen = (idx) => {
-  selectedId.value = idx
-  isClick.value = true
-}
-
-// Label helper functions
-const getAvailabilityLabel = (value) => {
-  const labels = {
-    'always': '상시',
-    'limited': '비상시',
-    'auto': '자동영입'
-  }
-  return labels[value] || value
-}
-
 const getActiveFilterCount = computed(() => {
-  return selectedElements.value.length + selectedJobs.value.length + availabilityFilter.value.length + dateFilter.value.length
+  return selectedElements.value.length + selectedJobs.value.length + selectedRoutes.value.length
 })
-
-// Methods
-const applyFilters = () => {
-  const filtered = charaList.value.filter((chara) => {
-    // Name search
-    if (searchName.value && !chara.cname.toLowerCase().includes(searchName.value.toLowerCase())) {
-      return false
-    }
-
-    // Element filter
-    if (selectedElements.value.length > 0 && !selectedElements.value.includes(chara.element_name)) {
-      return false
-    }
-
-    // Job filter
-    if (selectedJobs.value.length > 0 && !selectedJobs.value.includes(chara.job_name)) {
-      return false
-    }
-
-    // Availability filter
-    if (availabilityFilter.value.length > 0) {
-      if (availabilityFilter.value.includes('always') && !chara.is_always_available) return false
-      if (availabilityFilter.value.includes('limited') && chara.is_always_available) return false
-    }
-
-    // Date filter
-    if (dateFilter.value.length > 0) {
-      const releaseYear = new Date(chara.release_date).getFullYear().toString()
-      if (!dateFilter.value.includes(releaseYear)) return false
-    }
-
-    return true
-  })
-
-  filteredList.value = filtered
-}
 
 const resetFilters = () => {
   searchName.value = ''
   selectedElements.value = []
   selectedJobs.value = []
-  availabilityFilter.value = [] 
+  selectedRoutes.value = [] 
   activeDropdown.value = null
 }
 
-const toggleExpanded = (id) => {
-  const newExpanded = new Set(expandedItems.value)
-  if (newExpanded.has(id)) {
-    newExpanded.delete(id)
-  } else {
-    newExpanded.add(id)
-  }
-  expandedItems.value = newExpanded
-}
 
 const toggleDropdown = (dropdownName) => {
   if (activeDropdown.value === dropdownName) {
@@ -548,89 +421,94 @@ const toggleDropdown = (dropdownName) => {
   }
 }
 
-const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+
+const pickUpList = () => {
+  featuredCharacters.value = charaList.value.filter((item) => item.rerun_end_date > new Date() && Object.is(item.acquisition_method.label, '소환') );
+  featuredCharacters.value = featuredCharacters.value.map((item)=> ({
+      ...item,
+      isNew : dayjs(item.rerun_start_date).startOf('day').isSame(dayjs(item.release_date).startOf('day'))
+  }))
+  
+    console.log(featuredCharacters.value);
+} 
+  
+const characterList = async () => {  
+  console.log('characterList 실행됨')
+  isLoading.value = true;
+  try{  
+    const res = await instance.post('rerunlist', {
+      keyword: searchName.value,
+      elements: selectedElements.value,
+      jobs: selectedJobs.value,
+      acquisitions: selectedRoutes.value
+    });
+    console.log(res);
+    charaList.value = res.data.characters.map((item) =>({
+          ...item,
+          release_date : dayjs(item.release_date).startOf('day'),
+          rerun_end_date : dayjs(item.rerun_end_date).startOf('day'),
+          rerun_start_date : dayjs(item.rerun_start_date).startOf('day'),
+    }))
+
+   
+    
+    // console.log(charaList.value);   
+  } catch(error){
+      console.log(error);
+      
+  } finally {
+    isLoading.value = false;
+  }
+  
+}
+  
+const toggleHistoryTab = (characterId) => {
+  if (hasExpanded.value.has(characterId)) {
+    hasExpanded.value.delete(characterId)
+  } else {
+    hasExpanded.value.add(characterId)
+  }
+}
+const isSameDay = (baseDate, compareDate) => {
+  return baseDate.isSame(compareDate, 'day');
 }
 
-const handleClickOutside = (event) => {
-  const dropdowns = ['elementDropdown', 'jobDropdown', 'availabilityDropdown', 'dateDropdown']
-  const clickedOutside = dropdowns.every(dropdown => {
-    const element = document.querySelector(`[ref="${dropdown}"]`)
-    return !element || !element.contains(event.target)
-  })
+const handleImageError = (event) => {
   
-  if (clickedOutside) {
-    activeDropdown.value = null
-  }
 }
 
 
+//enum값 call 페이지 랜딩 시 한 번만
+const callEnums = async () => {
+  const rlt = await instance.get('enums/acquisition-methods');
 
   
-  
-  
-  const characterList = async () => {  
-    console.log('characterList 실행됨')
-    isLoading.value = true;
-    try{
-      const keywords = searchName.value;
-      const res = await instance.get('rerunlist', {params: {keywords}});
-      console.log(res);
-      charaList.value = res.data.characters.map((item) =>({
-            ...item,
-            release_date : dayjs(item.release_date).startOf('day'),
-            rerun_end_date : dayjs(item.rerun_end_date).startOf('day'),
-            rerun_start_date : dayjs(item.rerun_start_date).startOf('day'),
-          }))
+  // acquisitonAuto.value = rlt.filter((item)=>item.category.includes["AUTO"])
+  acquisitonAlways.value = rlt.data.filter((item)=>item.category.includes('ALWAYS'));
+  acquisitonLimited.value = rlt.data.filter((item)=>item.category.includes('LIMITED'));
+  console.log(acquisitonAlways.value);
+}
 
-        console.log(charaList.value);   
-    } catch(error){
-        console.log(error);
-        
-    } finally {
-      isLoading.value = false;
-    }
+//초기화
+onMounted(async () => {
+  isLoading.value = true;
+  try{
+    console.log(1);
+    await callEnums();
+    await characterList();
+    await pickUpList();
+  }catch (e) {
+    console.log(e);
     
+  }finally {
+    isLoading.value = false
   }
   
-  const toggleHistoryTab = (characterId) => {
-    if (hasExpanded.value.has(characterId)) {
-      hasExpanded.value.delete(characterId)
-    } else {
-      hasExpanded.value.add(characterId)
-    }
-  }
-  const isSameDay = (baseDate, compareDate) => {
-    return baseDate.isSame(compareDate, 'day');
-  }
-  const resetSearch = () => {
-    characterList()
-  }
+})
+</script>
   
-  const handleImageError = (event) => {
-    
-  }
-
-  const getDaysSince = (dateString) => {
-    const today = new Date()
-    const pastDate = new Date(dateString.replace(/년|월|일/g, '').replace(/\s+/g, '-'))
-    const diffTime = today - pastDate
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
-    return diffDays > 0 ? diffDays : 0
-  }
-  
-  // Initialize
-  onMounted(() => {
-    characterList()
-  })
-  </script>
-  
-  <style scoped>
+<style scoped>
   .container {
     max-width: 1200px;
   }
-  </style>
+</style>
