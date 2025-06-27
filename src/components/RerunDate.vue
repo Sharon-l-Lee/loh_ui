@@ -390,8 +390,6 @@ const acquisitonLimited = ref([])
 
 // Pickup states
 const featuredCharacters = ref([])
-const currentPickupIndex = ref(0)
-const pickupItemsPerPage = 3
 
 
 // Filter options
@@ -422,7 +420,7 @@ const toggleDropdown = (dropdownName) => {
 }
 
 
-const pickUpList = () => {
+const pickUpList = async () => {
   featuredCharacters.value = charaList.value.filter((item) => item.rerun_end_date > new Date() && Object.is(item.acquisition_method.label, '소환') );
   featuredCharacters.value = featuredCharacters.value.map((item)=> ({
       ...item,
