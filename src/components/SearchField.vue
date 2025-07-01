@@ -277,7 +277,7 @@
             <div v-if="characters?.length">
               <h3 class="text-lg font-semibold mb-4 text-gray-800 mt-5"> 캐릭터 ({{ characters.length }})</h3>
               <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-                <div v-for="ch in characters" class="bg-zinc-900 p-4 rounded-xl shadow-lg flex items-center gap-4">
+                <div v-for="ch in characters" class="bg-zinc-900 p-4 rounded-xl shadow-lg flex items-center gap-4 cursor-pointer">
                   <img :src="ch.imgUrl" class="w-16 h-16 rounded-full" />
                   <div class="flex-1" @click ="detailOpen(ch.id)">
                     <h2 class="text-lg text-white font-semibold">{{ ch.cname }} ({{ ch.cname_en }})</h2>
@@ -444,19 +444,15 @@ const getActiveFilterCount = computed(() => {
   return selectedElements.value.length + selectedJobs.value.length + selectedCurrencies.value.length + selectedBanners.value.length
 })
 
-// Methods
-const handleSearch = async () => {
+const selectSearch = async() =>{
   if(selectedCurrencies.value.length > 0 && selectedBanners.value.length === 0){
     selectedSummons.value = selectedCurrencies.value.filter((item)=>item ==='AL' || item === 'CT');
     selectedAcquisition.value = selectedCurrencies.value.filter((item)=>(item !=='AL' && item !== 'CT'))
-    console.log(selectedSummons.value);
-    console.log(selectedAcquisition.value);
 
   }else if(selectedCurrencies.value.length === 0 && selectedBanners.value.length > 0){
     selectedSummons.value = selectedBanners.value.filter((item)=>item.includes('RR') || item.includes('COL'));
     selectedAcquisition.value = selectedBanners.value.filter((item)=>(item !== 'RR' && item !=='COL'));
-    console.log(selectedSummons.value);
-    console.log(selectedAcquisition.value);
+
 
   }else{
     selectedSummons.value = selectedCurrencies.value.filter((item)=>item ==='AL' || item ==='CT');
@@ -467,16 +463,20 @@ const handleSearch = async () => {
     selectedAcquisition.value.push(
       ...selectedBanners.value.filter((item)=>(item !== 'RR' && item !=='COL'))
     )
-    console.log(selectedSummons.value);
-  console.log(selectedAcquisition.value);
 
   }
-  
-  console.log(selectedSummons);
-  console.log(selectedAcquisition);
 
+  if(selectedSummons.value.length > 0) selectedAcquisition.value.push('SUMM');
+
+}
+// Methods
+const handleSearch = async () => {
   
+  await selectSearch();
+
   const keywords = searchQuery.value.split('');
+  console.log(keywords);
+  
   await instance.post('search', {
       keyword: keywords,
       elements: selectedElements.value,
@@ -495,7 +495,7 @@ const handleSearch = async () => {
     console.log(error);
   })
   .finally(()=> {
-    
+    activeDropdown.value = null
   });
 }
 
@@ -516,6 +516,7 @@ const selectedAllAvailabilityChange = () => {
     selectedBanners.value = ['INVI', 'EVET', 'RR', 'COL']
     selectedCurrencies.value = ['GOLD', 'CRYS', 'FAME', 'FEDE', 'FATE', 'CT', 'AL']
   }
+  activeDropdown.value = null
 }
 
 //직업 선택변경
@@ -525,6 +526,7 @@ const selectedJobChange = () => {
   }else{
     selectedJobs.value = [1, 2, 3, 4, 5, 6]
   }
+  activeDropdown.value = null
 }
 //속성 선택변경
 const selectedElementsChange = () => {
@@ -533,8 +535,19 @@ const selectedElementsChange = () => {
   }else{
     selectedElements.value = [1, 2, 3, 4, 5]
   }
+  activeDropdown.value = null
 }
 
+const resetFilters =() => {
+  selectedCurrencies.value = []
+  selectedBanners.value = []
+  selectedAvailability.value = []
+  selectedJobs.value = []
+  selectedElements.value = []
+  activeDropdown.value = null
+  searchQuery.value =''
+
+}
 
 const handleAvailabilityChange = () => {
   console.log(selectedAvailability.value);
@@ -659,9 +672,9 @@ const callEnums = async () => {
 onMounted(async () => {
   // isLoading.value = true;
   try{
-    console.log(1);
+
     await callEnums();
-    // await characterList();
+    await handleSearch();
     // await pickUpList();
   }catch (e) {
     console.log(e);

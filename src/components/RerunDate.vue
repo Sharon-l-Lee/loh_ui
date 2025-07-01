@@ -306,7 +306,7 @@
                             Release
                           </span>
                         </div>
-                        <span class="text-xs text-gray-500">{{ chara.release_date }}일 전</span>
+                        <span class="text-xs text-gray-500">{{ chara.release_other_day }}일 전</span>
                       </div>
   
                       <div class="flex items-center justify-between text-sm">
@@ -324,7 +324,7 @@
                             Rerun
                           </span>
                         </div>
-                        <span class="text-xs text-gray-500">{{ chara.rerun_start_date }}일 전</span>
+                        <span class="text-xs text-gray-500">{{ chara.rerun_other_day }}일 전</span>
                       </div>
   
                       <div class="flex items-center justify-between text-sm">
@@ -340,16 +340,17 @@
                       </div>
                     </div>
   
-                    <!-- Next Prediction (placeholder) -->
+                    <!-- 복각 예측 -->
                     <div v-if="!chara.is_always_available" class="bg-amber-50 rounded-lg p-3 border-2 border-dashed border-amber-200">
                       <div class="flex items-center justify-between mb-2">
                         <div class="flex items-center gap-2">
                           <span class="text-sm font-medium text-amber-700">다음 복각 예상</span>
+                          <span class="text-amber-800">{{ chara.predict_day.format('YYYY년 MM월 DD일') }}</span>
                           <span class="px-2 py-0.5 rounded text-xs font-medium bg-amber-200 text-amber-800">
                             예측
                           </span>
                         </div>
-                        <span class="text-xs text-amber-600">약 3-6개월</span>
+                        <!-- <span class="text-xs text-amber-600">약 {{ predictCal }}</span> -->
                       </div>
   
                       <div class="text-sm text-amber-600">
@@ -371,6 +372,9 @@ import { ref, onMounted, computed } from 'vue'
 import { Search, ListRestart, History, ChevronDown, CheckCircle, X , ChevronLeft, ChevronRight} from 'lucide-vue-next'
 import instance from '../api/axiosInstance.js'
 import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(relativeTime);
 
 
 // Data states
@@ -380,6 +384,9 @@ const searchName = ref('')
 const hasExpanded = ref(new Set())
 const isLoading = ref(false)
 const activeDropdown = ref(null)
+const predictCalDate = ref(0);
+const predictCal = ref(0);
+
 
 // Filter states
 const selectedElements = ref([])
@@ -427,11 +434,10 @@ const pickUpList = async () => {
       isNew : dayjs(item.rerun_start_date).startOf('day').isSame(dayjs(item.release_date).startOf('day'))
   }))
   
-    console.log(featuredCharacters.value);
+    // console.log(featuredCharacters.value);
 } 
   
 const characterList = async () => {  
-  console.log('characterList 실행됨')
   isLoading.value = true;
   try{  
     const res = await instance.post('rerunlist', {
@@ -440,15 +446,24 @@ const characterList = async () => {
       jobs: selectedJobs.value,
       acquisitions: selectedRoutes.value
     });
-    console.log(res);
+    // console.log(res);
+    predictCalDate.value = res.data.rerunPredict;
+    predictCal.value = predictCalDate/30;
+    // console.log(res.data.rerunPredict);
+    
     charaList.value = res.data.characters.map((item) =>({
           ...item,
           release_date : dayjs(item.release_date).startOf('day'),
           rerun_end_date : dayjs(item.rerun_end_date).startOf('day'),
           rerun_start_date : dayjs(item.rerun_start_date).startOf('day'),
-    }))
-
-   
+          rerun_other_day : getDateDiff(dayjs(item.rerun_end_date)),
+          release_other_day : getDateDiff(dayjs(item.release_date)),
+          predict_day : !isSameDay(dayjs(item.release_date), dayjs(item.rerun_start_date)) ? (dayjs(item.rerun_end_date).add(predictCalDate.value, 'day')) : (dayjs(item.release_date).add(predictCalDate.value, 'day'))
+        }))
+    
+    // rerun_other_day : 
+    // console.log(dayjs((item.rerun_end_date - new Date())).startOf('day'));
+    
     
     // console.log(charaList.value);   
   } catch(error){
@@ -470,7 +485,16 @@ const toggleHistoryTab = (characterId) => {
 const isSameDay = (baseDate, compareDate) => {
   return baseDate.isSame(compareDate, 'day');
 }
+const getDateDiff=(date) =>{
+  let today = new Date();
+  if(dayjs(today).isAfter(date)){
+    let dayDiff = dayjs(today).diff(date, 'day')
 
+    
+    return dayDiff
+    
+  }
+}
 const handleImageError = (event) => {
   
 }
@@ -484,14 +508,14 @@ const callEnums = async () => {
   // acquisitonAuto.value = rlt.filter((item)=>item.category.includes["AUTO"])
   acquisitonAlways.value = rlt.data.filter((item)=>item.category.includes('ALWAYS'));
   acquisitonLimited.value = rlt.data.filter((item)=>item.category.includes('LIMITED'));
-  console.log(acquisitonAlways.value);
+  // console.log(acquisitonAlways.value);
 }
 
 //초기화
 onMounted(async () => {
   isLoading.value = true;
   try{
-    console.log(1);
+    // console.log(1);
     await callEnums();
     await characterList();
     await pickUpList();
