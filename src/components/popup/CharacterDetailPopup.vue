@@ -50,284 +50,283 @@
         
                     <!-- Tab Content -->
                     <div class="mt-6">
-                    <!-- Character Tab -->
-                    <div v-if="activeTab === 'character'" class="space-y-6">
-                        <div class="flex flex-col lg:flex-row gap-6">
-                        <!-- Character Portrait and Basic Info -->
-                        <div class="flex flex-col items-center space-y-4 lg:w-1/3">
-                            <div class="relative">
-                            <img
-                                :src="characterDetail.imgUrl"
-                                :alt="characterDetail.cname"
-                                class="w-32 h-32 rounded-full border-4 border-blue-500 object-cover"
-                            />
-                            <!-- <span class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
-                                Lv. {{ characterData.level }}
-                            </span> -->
-                            </div>
-                            <div class="text-center">
-                            <h3 class="text-xl font-bold">{{ characterDetail.cname }}</h3>
-                            <p class="text-gray-600">{{ characterDetail.cname_en }}</p>
-                            </div>
-        
-                            <!-- Experience Bar -->
-                            <!-- <div class="w-full bg-white border border-gray-200 rounded-lg p-4">
-                            <div>
-                                <div class="flex justify-between text-sm mb-1">
-                                <span>Experience</span>
-                                <span>{{ characterData.experience.current }}/{{ characterData.experience.required }}</span>
+                        <!-- Character Tab -->
+                        <div v-if="activeTab === 'character'" class="space-y-6">
+                            <div class="flex flex-col lg:flex-row gap-6">
+                            <!-- Character Portrait and Basic Info -->
+                            <div class="flex flex-col items-center space-y-4 lg:w-1/3">
+                                <div class="relative">
+                                <img
+                                    :src="characterDetail.imgUrl"
+                                    :alt="characterDetail.cname"
+                                    class="w-32 h-32 rounded-full border-4 border-blue-500 object-cover"
+                                />
+                                <!-- <span class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                                    Lv. {{ characterData.level }}
+                                </span> -->
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div
-                                    class="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                                    :style="{ width: (characterData.experience.current / characterData.experience.required) * 100 + '%' }"
-                                ></div>
+                                <div class="text-center">
+                                <h3 class="text-xl font-bold">{{ characterDetail.cname }}</h3>
+                                <p class="text-gray-600">{{ characterDetail.cname_en }}</p>
                                 </div>
+            
+                                <!-- Experience Bar -->
+                                <!-- <div class="w-full bg-white border border-gray-200 rounded-lg p-4">
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                    <span>Experience</span>
+                                    <span>{{ characterData.experience.current }}/{{ characterData.experience.required }}</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div
+                                        class="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                        :style="{ width: (characterData.experience.current / characterData.experience.required) * 100 + '%' }"
+                                    ></div>
+                                    </div>
+                                </div>
+                                </div> -->
                             </div>
-                            </div> -->
-                        </div>
-        
-                        <!-- Character Information -->
-                        <div class="flex-1 space-y-4">
-                            <!-- Personal Information -->
-                            <div class="bg-white border border-gray-200 rounded-lg">
-                                <div class="border-b border-gray-200 px-4 py-3">
-                                    <h4 class="flex items-center gap-2 font-semibold">
-                                    <User class="w-5 h-5 text-blue-500" />
-                                    Personal Information
-                                    </h4>
-                                </div>
-                            <div class="p-4">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+                            <!-- Character Information -->
+                            <div class="flex-1 space-y-4">
+                                <!-- Personal Information -->
+                                <div class="bg-white border border-gray-200 rounded-lg">
+                                    <div class="border-b border-gray-200 px-4 py-3">
+                                        <h4 class="flex items-center gap-2 font-semibold">
+                                        <User class="w-5 h-5 text-blue-500" />
+                                        Personal Information
+                                        </h4>
+                                    </div>
+                                <div class="p-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div class="space-y-3">
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">나이:</span>
+                                                <span class="font-medium">{{ characterDetail.age }}</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">신장:</span>
+                                                <span class="font-medium">{{ characterDetail.height }}cm</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">캐릭터 보이스(KR):</span>
+                                                <span class="font-medium">{{ characterDetail.voice }}</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-600">실장일:</span>
+                                                <span class="font-medium">{{ characterDetail.release_date }}</span>
+                                            </div>
+                                        </div>
                                     <div class="space-y-3">
                                         <div class="flex justify-between">
-                                            <span class="text-gray-600">나이:</span>
-                                            <span class="font-medium">{{ characterDetail.age }}</span>
+                                            <span class="text-gray-600">생일:</span>
+                                            <span class="font-medium">{{ characterDetail.birth }}</span>
                                         </div>
                                         <div class="flex justify-between">
-                                            <span class="text-gray-600">신장:</span>
-                                            <span class="font-medium">{{ characterDetail.height }}cm</span>
+                                            <span class="text-gray-600">별자리:</span>
+                                            <span class="font-medium">{{ characterDetail.zodiac }}</span>
                                         </div>
                                         <div class="flex justify-between">
-                                            <span class="text-gray-600">캐릭터 보이스(KR):</span>
-                                            <span class="font-medium">{{ characterDetail.voice }}</span>
+                                            <span class="text-gray-600">캐릭터 보이스(JP):</span>
+                                            <span class="font-medium">{{ characterDetail.voice_jp }}</span>
                                         </div>
                                         <div class="flex justify-between">
-                                            <span class="text-gray-600">실장일:</span>
-                                            <span class="font-medium">{{ characterDetail.release_date }}</span>
+                                            <span class="text-gray-600">MBTI:</span>
+                                            <span class="font-medium">{{ characterDetail.mbti }}</span>
                                         </div>
-                                    </div>
-                                <div class="space-y-3">
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">생일:</span>
-                                        <span class="font-medium">{{ characterDetail.birth }}</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">별자리:</span>
-                                        <span class="font-medium">{{ characterDetail.zodiac }}</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">캐릭터 보이스(JP):</span>
-                                        <span class="font-medium">{{ characterDetail.voice_jp }}</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">MBTI:</span>
-                                        <span class="font-medium">{{ characterDetail.mbti }}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-        
-                            <!-- Character Attributes -->
-                            <!-- <div class="bg-white border border-gray-200 rounded-lg">
-                            <div class="border-b border-gray-200 px-4 py-3">
-                                <h4 class="flex items-center gap-2 font-semibold">
-                                <Star class="w-5 h-5 text-yellow-500" />
-                                Character Attributes
-                                </h4>
-                            </div>
-                            <div class="p-4">
-                                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                <div
-                                    v-for="(value, attr) in characterData.attributes"
-                                    :key="attr"
-                                    class="space-y-2"
-                                >
-                                    <div class="flex justify-between items-center">
-                                    <span class="text-sm font-medium capitalize">{{ attr }}:</span>
-                                    <span class="text-sm font-bold">{{ value }}</span>
-                                    </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2">
+            
+                                <!-- Character Attributes -->
+                                <!-- <div class="bg-white border border-gray-200 rounded-lg">
+                                <div class="border-b border-gray-200 px-4 py-3">
+                                    <h4 class="flex items-center gap-2 font-semibold">
+                                    <Star class="w-5 h-5 text-yellow-500" />
+                                    Character Attributes
+                                    </h4>
+                                </div>
+                                <div class="p-4">
+                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                                     <div
-                                        class="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                                        :style="{ width: value + '%' }"
-                                    ></div>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                            </div> -->
-        
-                            <!-- Combat Stats -->
-                            <!-- <div class="bg-white border border-gray-200 rounded-lg">
-                            <div class="border-b border-gray-200 px-4 py-3">
-                                <h4 class="flex items-center gap-2 font-semibold">
-                                <Shield class="w-5 h-5 text-red-500" />
-                                Combat Statistics
-                                </h4>
-                            </div>
-                            <div class="p-4 space-y-4">
-                                <div class="space-y-3">
-                                <div>
-                                    <div class="flex justify-between text-sm mb-1">
-                                    <span>Health</span>
-                                    <span>{{ characterData.combatStats.health }}/{{ characterData.combatStats.maxHealth }}</span>
-                                    </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div
-                                        class="bg-red-500 h-2 rounded-full transition-all duration-300"
-                                        :style="{ width: (characterData.combatStats.health / characterData.combatStats.maxHealth) * 100 + '%' }"
-                                    ></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-sm mb-1">
-                                    <span>Mana</span>
-                                    <span>{{ characterData.combatStats.mana }}/{{ characterData.combatStats.maxMana }}</span>
-                                    </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div
-                                        class="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                                        :style="{ width: (characterData.combatStats.mana / characterData.combatStats.maxMana) * 100 + '%' }"
-                                    ></div>
-                                    </div>
-                                </div>
-                                </div>
-                                <hr class="border-gray-200" />
-                                <div class="grid grid-cols-2 gap-4">
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Attack:</span>
-                                    <span class="font-semibold">{{ characterData.combatStats.attack }}</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Defense:</span>
-                                    <span class="font-semibold">{{ characterData.combatStats.defense }}</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Speed:</span>
-                                    <span class="font-semibold">{{ characterData.combatStats.speed }}</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Crit Rate:</span>
-                                    <span class="font-semibold">{{ characterData.combatStats.critRate }}%</span>
-                                </div>
-                                </div>
-                            </div>
-                            </div> -->
-        
-                            <!-- Character Background -->
-                            <div class="bg-white border border-gray-200 rounded-lg">
-                            <div class="border-b border-gray-200 px-4 py-3">
-                                <h4 class="flex items-center gap-2 font-semibold">
-                                <Heart class="w-5 h-5 text-pink-500" />
-                                Character Profile
-                                </h4>
-                            </div>
-                            <div class="p-4 space-y-4">
-
-                                 <!-- Position Information -->
-                            <div>
-                                <h5 class="font-semibold mb-2">Position</h5>
-                                <div class="flex items-center gap-2 mb-2">
-                                    <span
-                                        :class="[
-                                        'px-3 py-1 rounded-full text-sm font-medium',
-                                        getElementColor(characterDetail.element_id)
-                                        ]"
+                                        v-for="(value, attr) in characterData.attributes"
+                                        :key="attr"
+                                        class="space-y-2"
                                     >
-                                        {{ characterDetail.element_name }} {{ characterDetail.job_name }}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- 습득방법 -->
-                            <div>
-                                <h5 class="font-semibold mb-2">획득방법</h5>
-                                <ul class="text-sm space-y-2">
-                                    <li
-                                        class="flex items-start gap-2"
-                                    >
-                                        <div class="mt-1 w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
-                                        <div>
-                                            <span class="font-medium">{{enumMap.summon[characterDetail.summonType]}}</span>
-                                            <span class="text-gray-600">{{enumMap.acqusition[characterDetail.acquisitionMethodType]}}</span>
+                                        <div class="flex justify-between items-center">
+                                        <span class="text-sm font-medium capitalize">{{ attr }}:</span>
+                                        <span class="text-sm font-bold">{{ value }}</span>
                                         </div>
-                                    </li>
-                                </ul>
-                            </div>
-                                <!-- <div>
-                                    <h5 class="font-semibold mb-2">포지션</h5>
-                                    <div class="flex flex-wrap gap-2">
-                                        <span class="px-2 py-1 bg-gray-100 border border-gray-300 rounded-md text-sm"
-                                        >
-                                        {{ characterDetail.element_name }} {{ characterDetail.job_name }}
-                                        </span>
+                                        <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div
+                                            class="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                            :style="{ width: value + '%' }"
+                                        ></div>
+                                        </div>
                                     </div>
-                                </div> -->
-                                <!-- <div>
-                                    <h5 class="font-semibold mb-2">획득처</h5>
-                                    <div class="flex flex-wrap gap-2">
-                                        <span class="px-2 py-1 bg-gray-100 border border-gray-300 rounded-md text-sm"
-                                        >
-                                        {{ characterDetail.element_name }} {{ characterDetail.job_name }}
-                                        </span>
                                     </div>
+                                </div>
                                 </div> -->
-        
-                                <div class="grid md:grid-cols-2 gap-4">
+            
+                                <!-- Combat Stats -->
+                                <!-- <div class="bg-white border border-gray-200 rounded-lg">
+                                <div class="border-b border-gray-200 px-4 py-3">
+                                    <h4 class="flex items-center gap-2 font-semibold">
+                                    <Shield class="w-5 h-5 text-red-500" />
+                                    Combat Statistics
+                                    </h4>
+                                </div>
+                                <div class="p-4 space-y-4">
+                                    <div class="space-y-3">
                                     <div>
-                                        <h5 class="font-semibold mb-2 text-green-600">좋아하는 음식</h5>
-                                        <ul class="text-sm space-y-1">
-                                            <li
-                                                v-for="favoriteFood in characterDetail.favorite_food"
-                                                :key="favoriteFood"
-                                                class="flex items-center gap-2"
-                                            >
-                                                <div class="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                                                {{ favoriteFood }}
-                                            </li>
-                                        </ul>
+                                        <div class="flex justify-between text-sm mb-1">
+                                        <span>Health</span>
+                                        <span>{{ characterData.combatStats.health }}/{{ characterData.combatStats.maxHealth }}</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div
+                                            class="bg-red-500 h-2 rounded-full transition-all duration-300"
+                                            :style="{ width: (characterData.combatStats.health / characterData.combatStats.maxHealth) * 100 + '%' }"
+                                        ></div>
+                                        </div>
                                     </div>
+                                    <div>
+                                        <div class="flex justify-between text-sm mb-1">
+                                        <span>Mana</span>
+                                        <span>{{ characterData.combatStats.mana }}/{{ characterData.combatStats.maxMana }}</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div
+                                            class="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                            :style="{ width: (characterData.combatStats.mana / characterData.combatStats.maxMana) * 100 + '%' }"
+                                        ></div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <hr class="border-gray-200" />
+                                    <div class="grid grid-cols-2 gap-4">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Attack:</span>
+                                        <span class="font-semibold">{{ characterData.combatStats.attack }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Defense:</span>
+                                        <span class="font-semibold">{{ characterData.combatStats.defense }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Speed:</span>
+                                        <span class="font-semibold">{{ characterData.combatStats.speed }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Crit Rate:</span>
+                                        <span class="font-semibold">{{ characterData.combatStats.critRate }}%</span>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div> -->
+            
+                                <!-- Character Background -->
+                                <div class="bg-white border border-gray-200 rounded-lg">
+                                <div class="border-b border-gray-200 px-4 py-3">
+                                    <h4 class="flex items-center gap-2 font-semibold">
+                                    <Heart class="w-5 h-5 text-pink-500" />
+                                    Character Profile
+                                    </h4>
+                                </div>
+                                <div class="p-4 space-y-4">
+
+                                    <!-- Position Information -->
                                 <div>
-                                    <h5 class="font-semibold mb-2 text-blue-600">중요하게 생각하는 것</h5>
-                                    <ul class="text-sm space-y-1">
-                                        <li
-                                            v-for="imVal in characterDetail.important_value"
-                                            :key="imVal"
-                                            class="flex items-center gap-2"
+                                    <h5 class="font-semibold mb-2">Position</h5>
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span
+                                            :class="[
+                                            'px-3 py-1 rounded-full text-sm font-medium',
+                                            getElementColor(characterDetail.element_id)
+                                            ]"
                                         >
-                                            <div class="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
-                                            {{ imVal }}
+                                            {{ characterDetail.element_name }} {{ characterDetail.job_name }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- 습득방법 -->
+                                <div>
+                                    <h5 class="font-semibold mb-2">획득방법</h5>
+                                    <ul class="text-sm space-y-2">
+                                        <li
+                                            class="flex items-start gap-2"
+                                        >
+                                            <div class="mt-1 w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                                            <div>
+                                                <span class="font-medium">{{enumMap.summon[characterDetail.summonType]}}</span>
+                                                <span class="text-gray-600">{{enumMap.acqusition[characterDetail.acquisitionMethodType]}}</span>
+                                            </div>
                                         </li>
                                     </ul>
                                 </div>
-                                </div>
-        
-                                <div>
-                                    <h5 class="font-semibold mb-2">Background Story</h5>
-                                    <p class="text-sm text-gray-600 leading-relaxed">
-                                        {{ characterDetail.description }}
-                                    </p>
+                                    <!-- <div>
+                                        <h5 class="font-semibold mb-2">포지션</h5>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="px-2 py-1 bg-gray-100 border border-gray-300 rounded-md text-sm"
+                                            >
+                                            {{ characterDetail.element_name }} {{ characterDetail.job_name }}
+                                            </span>
+                                        </div>
+                                    </div> -->
+                                    <!-- <div>
+                                        <h5 class="font-semibold mb-2">획득처</h5>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="px-2 py-1 bg-gray-100 border border-gray-300 rounded-md text-sm"
+                                            >
+                                            {{ characterDetail.element_name }} {{ characterDetail.job_name }}
+                                            </span>
+                                        </div>
+                                    </div> -->
+            
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <h5 class="font-semibold mb-2 text-green-600">좋아하는 음식</h5>
+                                            <ul class="text-sm space-y-1">
+                                                <li
+                                                    v-for="favoriteFood in characterDetail.favorite_food"
+                                                    :key="favoriteFood"
+                                                    class="flex items-center gap-2"
+                                                >
+                                                    <div class="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                                                    {{ favoriteFood }}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    <div>
+                                        <h5 class="font-semibold mb-2 text-blue-600">중요하게 생각하는 것</h5>
+                                        <ul class="text-sm space-y-1">
+                                            <li
+                                                v-for="imVal in characterDetail.important_value"
+                                                :key="imVal"
+                                                class="flex items-center gap-2"
+                                            >
+                                                <div class="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                                                {{ imVal }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    </div>
+            
+                                    <div>
+                                        <h5 class="font-semibold mb-2">Background Story</h5>
+                                        <p class="text-sm text-gray-600 leading-relaxed">
+                                            {{ characterDetail.description }}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                        </div>
         
-                    <!-- Skills Tab -->
-                    <!-- Skills Tab -->
+                        <!-- Skills Tab -->
                         <div v-if="activeTab === 'skills'" class="space-y-4">
                             <div
                                 v-for="skill in skillList"
@@ -393,7 +392,21 @@
 
                         <!-- Artifacts Tab -->
                         <div v-if="activeTab === 'artifacts'" class="space-y-4">
+                            <!-- 아티팩트가 없는 경우에 카드 형태로 표시 -->
                             <div
+                            v-if="!artifactList?.length"
+                            class="bg-white rounded-lg border-2 border-gray-300 p-6 shadow-sm"
+                            >
+                                <div class="flex items-center gap-4">
+                                    <div>
+                                    <h4 class="text-lg font-semibold text-gray-800">아티팩트 미실장</h4>
+                                    <p class="text-sm text-gray-500">이 캐릭터는 아티팩트를 보유하고 있지 않습니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div
+                                v-if="artifactList?.length"
                                 v-for="artifact in artifactList"
                                 :key="artifact.id"
                                 :class="[
@@ -461,7 +474,7 @@
   </template>
   
   <script setup>
-  import { onMounted, ref } from 'vue'
+  import { onMounted, ref, onUnmounted } from 'vue'
   import { User, Star, Zap, Heart, Sword, X } from 'lucide-vue-next'
   import instance from '../../api/axiosInstance.js'
   import dayjs from 'dayjs';
@@ -473,8 +486,8 @@
   const emit = defineEmits(['close']);
   const props = defineProps(['cid']);
   const characterDetail = ref({});
-  const skillList = ref({});
-  const artifactList = ref({});
+  const skillList = ref([]);
+  const artifactList = ref([]);
   
   const tabs = [
     { id: 'character', name: '캐릭터', icon: User },
@@ -512,10 +525,21 @@
     })
   }
 
+  const keyHandler =(e)=>{
+    if (e.key === 'Escape' || e.keyCode === 27) {
+        emit('close');
+    }
+
+  }
+
   onMounted(()=>{
     characterDetails(props.cid);
+    window.addEventListener('keydown', keyHandler);
     
-    
+  })
+
+  onUnmounted(()=>{
+    window.removeEventListener('keydown', keyHandler);
   })
   
   const getElementColor =(elementId) =>{
