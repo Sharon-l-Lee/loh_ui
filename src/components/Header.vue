@@ -25,30 +25,72 @@
         </router-link>
       </nav>
 
-      <!-- 우측 문의 링크 -->
-      <div class="hidden md:block">
-        <button @click ="isOpen =true" 
-          class="text-sm font-medium hover:text-amber-500">
+      <!-- 다크모드, 문의 -->
+      <div class="hidden md:flex items-center gap-4">
+        <!-- 다크모드 토글 -->
+        <!-- <button
+          @click="toggleDark"
+          class="relative w-20 h-10 bg-gray-300 dark:bg-gray-700 rounded-full"
+          aria-label="Toggle dark mode"
+        >
+          <div
+            class="absolute top-1 left-1 w-8 h-8 bg-white rounded-full shadow-md transition-transform duration-200 flex items-center justify-center"
+            :class="isDark ? 'translate-x-10' : 'translate-x-0'"
+          >
+            <component
+              :is="isDark ? Moon : Sun"
+              :class="[
+                'w-5 h-5',
+                isDark ? 'text-purple-400' : 'text-amber-400'
+              ]"
+            />
+          </div>
+        </button> -->
+
+        <!-- 문의 버튼 -->
+        <button
+          @click="isOpen = true"
+          class="text-sm font-medium hover:text-amber-500"
+        >
           문의
         </button>
-        <ContactPopup v-if="isOpen" @close="isOpen = false"></ContactPopup>         
-        <!-- @close="isOpen = false" -->
 
+        <!-- 문의 팝업 -->
+        <ContactPopup v-if="isOpen" @close="isOpen = false" />
       </div>
 
+
     </div>
+
+   
+
   </header>
 
 </template>
+
+
+
   <script setup>
-  import { ref } from 'vue'
-  import { ScrollText } from 'lucide-vue-next'
+  import { ref, onMounted } from 'vue'
+  import { ScrollText, Moon, Sun } from 'lucide-vue-next'
+  
   import  ContactPopup from '../components/popup/ContactPopup.vue'
 
 
-  const isOpen = ref(false);
-  
 
-  </script>
-    
-   
+
+  const isOpen = ref(false);
+  // const isDark = ref(false);
+  
+//   onMounted(() => {
+//   isDark.value = localStorage.theme === 'dark' || window.matchMedia('(prefers-color-scheme: dark)').matches
+//   document.documentElement.classList.toggle('dark', isDark.value)
+// })
+
+// const toggleDark = () => {
+//   isDark.value = !isDark.value
+//   document.documentElement.classList.toggle('dark', isDark.value)
+//   localStorage.theme = isDark.value ? 'dark' : 'light'
+// }
+
+</script>

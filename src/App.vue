@@ -6,9 +6,9 @@ import Footer from './components/Footer.vue'
 </script>
 
 <template>
-  <Header />
-  <router-view/>
-  <Footer />
+    <Header />
+    <router-view/>
+    <Footer />
 <!-- <RerunDate /> -->
 </template>
 
