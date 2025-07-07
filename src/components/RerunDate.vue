@@ -32,9 +32,8 @@
                     <div class="flex items-center gap-3">
                       <!-- 캐릭터 아바타 -->
                       <div class="relative">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-yellow-500 flex items-center justify-center text-lg">
-                          {{ character.job_name }}
-                        </div>
+                        <img :src ="getImgUrl(character.cf_url)" class="w-10 h-10 hexagon bg-gradient-to-br from-amber-500 to-yellow-500 flex items-center justify-center text-lg" />
+                        
                         <!-- NEW 배지 -->
                         <div v-if="!!character.isNew" class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
                           <span class="text-white text-xs font-bold">N</span>
@@ -114,6 +113,15 @@
                   >
                     <div class="p-2 border-b border-gray-100 text-sm font-medium text-gray-700">속성 선택</div>
                     <div class="p-1">
+                      <label class="flex items-center px-2 py-1.5 hover:bg-gray-50 rounded cursor-pointer">
+                        <input
+                          type="checkbox"
+                          :checked="selectedElements.length === 5"
+                          @change="selectedElementsChange"
+                          class="mr-2 rounded border-gray-300"
+                        />
+                        <span class="text-sm font-medium">전체 선택</span>
+                      </label>
                       <label 
                         v-for="element in elements" 
                         :key="element.id"
@@ -149,6 +157,15 @@
                   >
                     <div class="p-2 border-b border-gray-100 text-sm font-medium text-gray-700">직업 선택</div>
                     <div class="p-1">
+                      <label class="flex items-center px-2 py-1.5 hover:bg-gray-50 rounded cursor-pointer">
+                        <input
+                          type="checkbox"
+                          :checked="selectedJobs.length === 6"
+                          @change="selectedJobChange"
+                          class="mr-2 rounded border-gray-300"
+                        />
+                        <span class="text-sm font-medium">전체 선택</span>
+                      </label>
                       <label 
                         v-for="job in jobs" 
                         :key="job.id"
@@ -183,6 +200,15 @@
                   >
                     <div class="p-2 border-b border-gray-100 text-sm font-medium text-gray-700">속성 선택</div>
                     <div class="p-1">
+                      <label class="flex items-center px-2 py-1.5 hover:bg-gray-50 rounded cursor-pointer">
+                        <input
+                          type="checkbox"
+                          :checked="selectedRoutes.length === 3"
+                          @change="selectedAllRoutesChange"
+                          class="mr-2 rounded border-gray-300"
+                        />
+                        <span class="text-sm font-medium">전체 선택</span>
+                      </label>
                       <label 
                         v-for="route in routes" 
                         :key="route.id"
@@ -244,9 +270,9 @@
                 <!-- 메인 캐릭터 정보 -->
                 <div class="p-4 flex items-center">
                   <img 
-                    :src="chara.img_url"
+                    :src="getImgUrl(chara.cf_url)"
                     :alt="chara.cname"
-                    class="mr-4 border border-gray-200 w-16 h-16 rounded-lg object-cover"
+                    class="mr-4 border border-gray-200 w-16 h-16 hexagon object-cover"
                   />
                   <div class="flex-1">
                     <div class="flex items-center gap-2 mb-2">
@@ -373,6 +399,8 @@ import { Search, ListRestart, History, ChevronDown, CheckCircle, X , ChevronLeft
 import instance from '../api/axiosInstance.js'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import CONST from '../constants/constant.js';
+
 
 dayjs.extend(relativeTime);
 
@@ -428,13 +456,13 @@ const toggleDropdown = (dropdownName) => {
 
 
 const pickUpList = async () => {
-  featuredCharacters.value = charaList.value.filter((item) => item.rerun_end_date > new Date() && Object.is(item.acquisition_method.label, '소환') );
+  featuredCharacters.value = charaList.value.filter((item) => (item.rerun_start_date < new Date()) && item.rerun_end_date > new Date() && Object.is(item.acquisition_method.label, '소환') );
   featuredCharacters.value = featuredCharacters.value.map((item)=> ({
       ...item,
       isNew : dayjs(item.rerun_start_date).startOf('day').isSame(dayjs(item.release_date).startOf('day'))
   }))
   
-    // console.log(featuredCharacters.value);
+    console.log(featuredCharacters.value);
 } 
   
 const characterList = async () => {  
@@ -446,7 +474,7 @@ const characterList = async () => {
       jobs: selectedJobs.value,
       acquisitions: selectedRoutes.value
     });
-    // console.log(res);
+    console.log(res);
     predictCalDate.value = res.data.rerunPredict;
     predictCal.value = predictCalDate/30;
     // console.log(res.data.rerunPredict);
@@ -474,7 +502,36 @@ const characterList = async () => {
   }
   
 }
-  
+
+//획득경로 선택 변경
+const selectedAllRoutesChange = () => {
+  if(selectedRoutes.value.length === 3){
+    selectedRoutes.value = []
+  }else{
+    selectedRoutes.value=['SUMM', 'EVET', 'PACK']
+  }
+  activeDropdown.value = null
+}
+
+//직업 선택변경
+const selectedJobChange = () => {
+  if(selectedJobs.value.length === 6){
+    selectedJobs.value = []
+  }else{
+    selectedJobs.value = [1, 2, 3, 4, 5, 6]
+  }
+  activeDropdown.value = null
+}
+//속성 선택변경
+const selectedElementsChange = () => {
+  if(selectedElements.value.length === 5){
+    selectedElements.value = []
+  }else{
+    selectedElements.value = [1, 2, 3, 4, 5]
+  }
+  activeDropdown.value = null
+}
+
 const toggleHistoryTab = (characterId) => {
   if (hasExpanded.value.has(characterId)) {
     hasExpanded.value.delete(characterId)
@@ -495,10 +552,13 @@ const getDateDiff=(date) =>{
     
   }
 }
-const handleImageError = (event) => {
-  
-}
 
+const getImgUrl = (imgId) => {
+  if (!imgId || imgId === 'placeholder') {
+    return `${CONST.IMG_BASE_URL}/${CONST.PLACEHOLDER}/${CONST.VARIANT}`;
+  }
+  return `${CONST.IMG_BASE_URL}/${imgId}/${CONST.VARIANT}`;
+};
 
 //enum값 call 페이지 랜딩 시 한 번만
 const callEnums = async () => {
@@ -533,4 +593,16 @@ onMounted(async () => {
   .container {
     max-width: 1200px;
   }
+
+  .hexagon {
+    clip-path: polygon(
+      50% 0%,
+      93% 25%,
+      93% 75%,
+      50% 100%,
+      7% 75%,
+      7% 25%
+    );
+  }
+
 </style>

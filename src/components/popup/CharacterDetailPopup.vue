@@ -55,15 +55,26 @@
                             <div class="flex flex-col lg:flex-row gap-6">
                             <!-- Character Portrait and Basic Info -->
                             <div class="flex flex-col items-center space-y-4 lg:w-1/3">
-                                <div class="relative">
-                                <img
-                                    :src="characterDetail.imgUrl"
-                                    :alt="characterDetail.cname"
-                                    class="w-32 h-32 rounded-full border-4 border-blue-500 object-cover"
-                                />
-                                <!-- <span class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
-                                    Lv. {{ characterData.level }}
-                                </span> -->
+                                <!-- <div class="relative">
+                                    <img
+                                        :src="getImgUrl(characterDetail.cf_url)"
+                                        :alt="characterDetail.cname"
+                                        class="w-32 h-32 hexagon shadow-[0_0_0_4px_#3b82f6] object-cover"
+                                    />
+                                </div> -->
+
+                                
+                                <div class="relative w-32 h-32">
+                                    <div
+                                        class="w-32 h-32 p-1 rounded-lg"
+                                        :class="[bgColors[characterDetail.element_id], 'flex items-center justify-center']"
+                                    >
+                                        <img
+                                        :src="getImgUrl(characterDetail.cf_url)"
+                                        class="w-full h-full object-contain"
+                                        alt="육각형 이미지"
+                                        />
+                                    </div>
                                 </div>
                                 <div class="text-center">
                                 <h3 class="text-xl font-bold">{{ characterDetail.cname }}</h3>
@@ -236,7 +247,7 @@
                                 </div>
                                 <div class="p-4 space-y-4">
 
-                                    <!-- Position Information -->
+                                <!-- Position Information -->
                                 <div>
                                     <h5 class="font-semibold mb-2">Position</h5>
                                     <div class="flex items-center gap-2 mb-2">
@@ -331,15 +342,15 @@
                             <div
                                 v-for="skill in skillList"
                                 :key="skill.id"
-                                class="bg-white border border-gray-200 rounded-lg"
+                                class="bg-white border border-gray-200"
                             >
                                 <div class="border-b border-gray-200 px-4 py-3">
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center gap-3">
                                             <img
-                                                :src="skill.image || '/placeholder.svg?height=48&width=48&text=⚡'"
+                                                :src="getImgUrl(skill.cf_url)"
                                                 :alt="skill.name"
-                                                class="w-12 h-12 rounded-lg border-2 border-gray-300 object-cover"
+                                                class="w-12 h-12 object-cover"
                                             />
                                             <div class="flex items-center gap-2">
                                                 <h4 class="font-semibold">{{ skill.name }}</h4>
@@ -391,8 +402,11 @@
                         </div>
 
                         <!-- Artifacts Tab -->
+                
+
+
+
                         <div v-if="activeTab === 'artifacts'" class="space-y-4">
-                            <!-- 아티팩트가 없는 경우에 카드 형태로 표시 -->
                             <div
                             v-if="!artifactList?.length"
                             class="bg-white rounded-lg border-2 border-gray-300 p-6 shadow-sm"
@@ -406,56 +420,43 @@
                             </div>
 
                             <div
-                                v-if="artifactList?.length"
                                 v-for="artifact in artifactList"
                                 :key="artifact.id"
-                                :class="[
-                                'bg-white rounded-lg border-2',
-                                getRarityColor(artifact.type)
-                                ]"
-                            >
-                                <div class="border-b border-gray-200 px-4 py-3">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center gap-3">
-                                            <img
-                                                :src="artifact.image || '/placeholder.svg?height=64&width=64&text=🎯'"
-                                                :alt="artifact.name"
-                                                :class="[
-                                                'w-16 h-16 rounded-lg border-2 object-cover',
-                                                getRarityColor(artifact.type).replace('text-', 'border-')
-                                                ]"
-                                            />
-                                            <div>
-                                                <div class="flex items-center gap-2">
-                                                    <h4 class="font-semibold">{{ artifact.name }}</h4>
-                                                    <span
-                                                        :class="[
-                                                        'px-2 py-1 rounded-md text-xs font-medium border',
-                                                        getRarityColor(artifact.type)
-                                                        ]"
-                                                    >
-                                                        {{ enumMap.artifact[artifact.type] }}
-                                                    </span>
-                                                </div>
-                                                <p class="text-gray-600 text-sm">
-                                                {{ enumMap.artifact[artifact.type] }}
-                                                <!-- • Level {{ artifact.level }} -->
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                class="flex bg-white rounded-lg border-2 overflow-hidden"
+                                :class="getRarityColor(artifact.type)"
+                                >
+                                <div class="w-28 h-40 flex-shrink-0">
+                                    <img
+                                    :src="getImgUrl(artifact.cf_url)"
+                                    :alt="artifact.name"
+                                    class="w-full h-full object-contain rounded-l-lg"
+                                    />
                                 </div>
-                                <div class="p-4">
-                                    <p class="text-sm text-gray-600 mb-3">{{ artifact.a_desc }}</p>
-                                    <!-- <hr class="border-gray-200 my-3" /> -->
-                                    <div class="grid grid-cols-2 gap-2">
-                                        <div
-                                        v-for="(value, stat) in artifact.stats"
-                                        :key="stat"
-                                        class="flex justify-between"
+                                <div class="p-4 flex flex-col justify-between flex-1">
+                                    <div>
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <h4 class="text-lg font-semibold">{{ artifact.name }}</h4>
+                                        <span
+                                        class="text-xs font-medium px-2 py-1 rounded-md border"
+                                        :class="getRarityColor(artifact.type)"
                                         >
-                                            <span class="text-gray-600 capitalize">
-                                                {{ stat.replace(/([A-Z])/g, ' $1').trim() }}:
+                                        {{ enumMap.artifact[artifact.type] }}
+                                        </span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-2">
+                                        {{ artifact.a_desc }}
+                                    </p>
+                                    </div>
+
+                                    <!-- 스탯 -->
+                                    <div class="grid grid-cols-2 gap-x-2 gap-y-1 text-sm">
+                                        <div
+                                            v-for="(value, stat) in artifact.stats"
+                                            :key="stat"
+                                            class="flex justify-between"
+                                        >
+                                            <span class="text-gray-600">
+                                            {{ stat.replace(/([A-Z])/g, ' $1').trim() }}:
                                             </span>
                                             <span class="font-semibold text-green-600">{{ value }}</span>
                                         </div>
@@ -479,6 +480,7 @@
   import instance from '../../api/axiosInstance.js'
   import dayjs from 'dayjs';
   import  { enumMap } from "../../constants/enumsMap.js";
+  import  CONST from "../../constants/constant.js";
   
 //   const open = ref(false)
   const activeTab = ref('character')
@@ -495,12 +497,32 @@
     { id: 'artifacts', name: '아티팩트', icon: Sword }
   ]
 
+  onMounted(()=>{
+    characterDetails(props.cid);
+    window.addEventListener('keydown', keyHandler);
+    
+  })
+
+  onUnmounted(()=>{
+    window.removeEventListener('keydown', keyHandler);
+  })
+
+  const bgColors = {
+    2: 'border-red-500',
+    1: 'border-blue-500',
+    3: 'border-green-500',
+    4: 'border-yellow-400',
+    5: 'border-purple-600',
+    };
+
   const characterDetails = (idx) =>{
     instance.get('detail', {params: {idx}})
     .then((response)=> {
         /**
          * 캐릭터 정보(포맷팅)
          */
+
+        
         const cdata = response.data.characterInfo;
         cdata.release_date = dayjs(cdata.release_date).format("YYYY년 MM월 DD일")
         cdata.birth = dayjs(cdata.birth).format("MM월 DD일")
@@ -532,15 +554,15 @@
 
   }
 
-  onMounted(()=>{
-    characterDetails(props.cid);
-    window.addEventListener('keydown', keyHandler);
-    
-  })
+  const getImgUrl = (imgId) => {
+  if (!imgId || imgId === 'placeholder') {
+    return `${CONST.IMG_BASE_URL}/${CONST.PLACEHOLDER}/${CONST.VARIANT}`;
+  }
+  return `${CONST.IMG_BASE_URL}/${imgId}/${CONST.VARIANT}`;
+};
 
-  onUnmounted(()=>{
-    window.removeEventListener('keydown', keyHandler);
-  })
+
+
   
   const getElementColor =(elementId) =>{
     switch(elementId) {
@@ -579,4 +601,16 @@
   .fill-current {
     fill: currentColor;
   }
+  .clip-hexagon {
+  clip-path: polygon(
+    25% 0%,
+    75% 0%,
+    100% 50%,
+    75% 100%,
+    25% 100%,
+    0% 50%
+  );
+  border-width: 4px;
+  border-style: solid;
+}
   </style>

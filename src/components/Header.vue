@@ -1,7 +1,7 @@
   <template>
     <!-- Header -->
     <header class="sticky top-0 z-40 border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 shadow-sm">
-      <div class="container mx-auto flex h-16 items-center justify-between px-4 py-4">
+      <div class="container mx-auto flex h-20 items-center justify-between px-4 py-2">
         
       <!-- 로고 -->
       <div class="flex items-center gap-2">
@@ -10,12 +10,18 @@
       </div>
 
       <!-- 가운데 메인 내비게이션 -->
-      <nav class="hidden md:flex gap-10">
+      <nav class="hidden md:flex gap-10 absolute left-1/2 transform -translate-x-1/2">
+        <router-link to="/about" class="text-lg font-bold hover:text-amber-500">
+          ABOUT
+        </router-link>
+        <!-- <router-link to="/info" class="text-lg font-bold hover:text-amber-500">
+          로드 아카이브 소개
+        </router-link> -->
         <router-link to="/" class="text-lg font-bold hover:text-amber-500">
           로드 아카이브
         </router-link>
         <router-link to="/rerun" class="text-lg font-bold hover:text-amber-500">
-          실장 기록실
+          복각 언제해?
         </router-link>
       </nav>
 
@@ -31,9 +37,9 @@
       </div>
 
     </div>
-</header>
+  </header>
 
-  </template>
+</template>
   <script setup>
   import { ref } from 'vue'
   import { ScrollText } from 'lucide-vue-next'

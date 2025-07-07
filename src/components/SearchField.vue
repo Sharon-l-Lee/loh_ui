@@ -262,8 +262,8 @@
       </section>
 
       <!-- 검색 결과 -->
-      <section class="w-full py-8 md:py-12">
-        <div class="container mx-auto px-4 md:px-6">
+      <section class="w-full py-8 md:py-12" >
+        <div ref="scrollSection" class="container mx-auto px-4 md:px-6">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <h2 class="text-2xl font-bold tracking-tighter sm:text-3xl">
@@ -274,13 +274,13 @@
           <!-- 리스트 -->
           <div class="w-full py-8 md:py-12">
             <!-- 캐릭터 -->
-            <div v-if="characters?.length">
+            <div ref="charaDiv" id="characters" v-if="characters?.length">
               <h3 class="text-lg font-semibold mb-4 text-gray-800 mt-5"> 캐릭터 ({{ characters.length }})</h3>
               <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-                <div v-for="ch in characters" class="bg-zinc-900 p-4 rounded-xl shadow-lg flex items-center gap-4 cursor-pointer">
-                  <img :src="ch.imgUrl" class="w-16 h-16 rounded-full" />
+                <div v-for="ch in characters" class="bg-white p-4 rounded-xl shadow-lg flex items-center gap-4 cursor-pointer">
+                  <img :src="getImgUrl(ch.cf_url)" class="w-16 h-16 rounded-full" />
                   <div class="flex-1" @click ="detailOpen(ch.id)">
-                    <h2 class="text-lg text-white font-semibold">{{ ch.cname }} ({{ ch.cname_en }})</h2>
+                    <h2 class="text-lg text-black font-semibold">{{ ch.cname }} ({{ ch.cname_en }})</h2>
                     <div class="flex items-center gap-2 mt-1">
                       <img :src="getJobIcon(ch.job_id)" class="w-8 h-8" :alt="ch.job_name" title="직업" />
                       <img :src="getElement(ch.element_id)" class="w-8 h-8" :alt="ch.element_name" title="속성" />
@@ -290,19 +290,19 @@
               </div>
             </div>
             <!-- 스킬 -->
-            <div v-if="skills?.length">
+            <div ref="skillDiv" id="skills" v-if="skills?.length">
               <h3 class="text-lg font-semibold mb-4 text-gray-800 mt-5"> 스킬 ({{ skills.length }})</h3>
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <template v-for="skill in skills"
+                <template v-for="skill in skillWithHighlights"
                 :key="skill.id">
                 <!-- <div class="flex flex-col space-y-2"> -->
                   <div
-                  class="flex gap-4 bg-zinc-900 p-4 rounded-xl shadow-md hover:ring-2 hover:ring-amber-400 transition cursor-pointer"
+                  class="flex gap-4 bg-white p-4 rounded-xl shadow-md hover:ring-2 hover:ring-amber-400 transition cursor-pointer"
                   @click ="detailOpen(skill.c_id)"
                   >
                   <!-- 스킬 이미지 -->
                     <img
-                      :src="`http://localhost:5173/icons/element/fire.webp`" 
+                      :src="getImgUrl(skill.cf_url)" 
                       class="w-16 h-16 rounded-lg object-cover"
                       alt="스킬 이미지"
                     />
@@ -311,7 +311,7 @@
                     <div class="flex flex-col flex-1">
                       <!-- 스킬 이름 + 타입 -->
                       <div class="flex items-center gap-2">
-                        <h2 class="text-base font-semibold truncate text-white">
+                        <h2 class="text-base font-semibold truncate text-black">
                           {{ skill.sname }}
                         </h2>
                         <span class="text-xs px-2 py-0.5 rounded bg-blue-500 text-white">
@@ -320,14 +320,20 @@
                         
                       </div>
                       <div class="flex items-center gap-2">
-                        <h2 class="text-base font-semibold truncate text-gray-400">
-                          {{ skill.cname.split(" ")[0] }}
+                        <h2 class="text-base truncate text-gray-500">
+                          {{ skill.cname }}
                         </h2>
                       </div>
             
                       <!-- 스킬 설명 -->
-                      <p class="mt-2 text-sm text-zinc-300 leading-relaxed whitespace-pre-line">
-                        {{ skill.s_desc }}
+
+                      
+                      <p class="mt-2 text-sm text-zinc-800 leading-relaxed whitespace-pre-line">
+                        <!-- {{ skill.s_desc }} -->
+
+                        <span v-for="(part, i) in skill.parsedDesc" :key="i" :class="{ 'font-bold text-amber-600': part.highlight }">
+                          {{ part.text }}
+                        </span>
                       </p>
                     </div>
                   </div>
@@ -336,18 +342,18 @@
             </div>
       
             <!-- 아티팩트 -->
-            <div v-if="artifacts?.length">
+            <div ref="artifactDiv" id="artifacts" v-if="artifacts?.length">
               <h3 class="text-lg font-semibold mb-4 text-gray-800 mt-5"> 아티팩트 ({{ artifacts.length }})</h3>
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div
-                  v-for="af in artifacts"
+                  v-for="af in artifactWithHighlights"
                   @click ="detailOpen(af.c_id)"
                   :key="af.id"
-                  class="flex gap-4 bg-zinc-900 p-4 rounded-xl shadow-md hover:ring-2 hover:ring-amber-400 transition cursor-pointer overflow-hidden"
+                  class="flex gap-4 bg-white p-4 rounded-xl shadow-md hover:ring-2 hover:ring-amber-400 transition cursor-pointer overflow-hidden"
                 >
                   <!-- 아티팩트 이미지 -->
                   <img
-                    :src="`http://localhost:5173/icons/artifact/라플라스_495.webp`" 
+                    :src="getImgUrl(af.cf_url)" 
                     class="w-16 h-16 rounded-lg object-cover shrink-0"
                     alt="아티팩트 이미지"
                   />
@@ -356,7 +362,7 @@
                   <div class="flex flex-col flex-1 overflow-hidden">
                     <!-- 아티팩트 이름 + 타입 -->
                     <div class="flex items-center gap-2 overflow-hidden">
-                      <h2 class="text-base font-semibold truncate text-white max-w-full">
+                      <h2 class="text-base font-semibold truncate text-black max-w-full">
                         {{ af.aname }}
                       </h2>
                       <span class="text-xs px-2 py-0.5 rounded bg-blue-500 text-white truncate">
@@ -365,8 +371,11 @@
                     </div>
 
                     <!-- 아티팩트 설명 -->
-                    <p class="mt-2 text-sm text-zinc-300 leading-relaxed break-words whitespace-pre-line overflow-hidden">
-                      {{ af.a_desc }}
+                    <p class="mt-2 text-sm text-zinc-800 leading-relaxed break-words whitespace-pre-line overflow-hidden">
+                      <!-- {{ af.a_desc }} -->
+                      <span v-for="(part, i) in af.parsedDesc" :key="i" :class="{ 'font-bold text-amber-600': part.highlight }">
+                          {{ part.text }}
+                        </span>
                     </p>
                   </div>
                 </div>
@@ -391,16 +400,24 @@
           </div>
         <!-- </div> -->
       </section>
+
+      <div class="fixed bottom-6 right-6 flex flex-col gap-1 z-50">
+        <button @click="scrollToSection('top')" class="top-btn">⬆ Top</button>
+        <button @click="scrollToSection('characters')" class="top-btn">캐릭터</button>
+        <button @click="scrollToSection('skills')" class="top-btn">스킬</button>
+        <button @click="scrollToSection('artifacts')" class="top-btn">아티팩트</button>
+      </div>
     </main>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { Search, ListRestart, X, CheckCircle } from 'lucide-vue-next'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { Search, X } from 'lucide-vue-next'
 import instance from '../api/axiosInstance.js'
 import  { enumMap } from "../constants/enumsMap.js";
-import CharaDetailPopup from "./popup/CharacterDetailPopup.vue";
+import CharaDetailPopup from './popup/CharacterDetailPopup.vue';
+import CONST from '../constants/constant.js';
 
 
 // States
@@ -413,8 +430,18 @@ const isClick = ref(false);
 const props = defineProps(['cid']);
 const isLoading = ref(false)
 const activeDropdown = ref(null)
-
 const selectedAvailability = ref([])
+
+const skillWithHighlights = ref([])
+const artifactWithHighlights = ref([])
+
+const isScrollShow = ref(false)
+
+// Section id
+const charaDiv = ref(null)
+const skillDiv = ref(null)
+const artifactDiv = ref(null)
+const scrollSection = ref(null)
 
 // Filter states
 const selectedElements = ref([])
@@ -471,14 +498,15 @@ const selectSearch = async() =>{
 }
 // Methods
 const handleSearch = async () => {
+  isLoading.value = true;
   
   await selectSearch();
-
-  const keywords = searchQuery.value.split('');
+  
+  const keywords = searchQuery.value.split(' ');
   console.log(keywords);
   
   await instance.post('search', {
-      keyword: keywords,
+      keywords: keywords,
       elements: selectedElements.value,
       jobs: selectedJobs.value,
       acquisitions: selectedAcquisition.value,
@@ -489,6 +517,8 @@ const handleSearch = async () => {
     artifacts.value = response.data.artifacts;  
     characters.value = response.data.characters;  
     skills.value = response.data.skills;
+
+    
   })
   .catch((error)=> {
     // 에러
@@ -496,8 +526,52 @@ const handleSearch = async () => {
   })
   .finally(()=> {
     activeDropdown.value = null
+    isLoading.value = false;
   });
 }
+
+const highlighting = async () => {
+
+  skillWithHighlights.value = skills.value.map(skill => ({
+    ...skill,
+    parsedDesc: descFormat(skill.s_desc)
+  }));
+
+  artifactWithHighlights.value = artifacts.value.map(artifact => ({
+    ...artifact,
+    parsedDesc: descFormat(artifact.a_desc)
+  }));
+  
+}
+const descFormat = (desc) => {
+  const pattern = /(~?\d+~?\d+%?|~?\d+턴|\([^)]+\))/g;
+  const result = [];
+
+  let lastIndex = 0;
+  let match;
+
+  while ((match = pattern.exec(desc)) !== null) {
+    const start = match.index;
+    const end = pattern.lastIndex;
+
+    // 하이라이트 전 일반 텍스트
+    if (start > lastIndex) {
+      result.push({ text: desc.slice(lastIndex, start), highlight: false });
+    }
+
+    // 하이라이트 텍스트
+    result.push({ text: match[0], highlight: true });
+
+    lastIndex = end;
+  }
+
+  // 마지막 남은 일반 텍스트
+  if (lastIndex < desc.length) {
+    result.push({ text: desc.slice(lastIndex), highlight: false });
+  }
+
+  return result;
+};
 
 const detailOpen = (idx) =>{
   selectedId.value = idx
@@ -594,59 +668,79 @@ const toggleBanner = (banner) => {
   }
 }
 
+
+
 const getJobIcon = (jobId) => {
-  const imgUrl = 'http://localhost:5173/icons/jobs/'
   switch (jobId) {
     case 1:
-      return imgUrl + "guardian.webp";
-      break;
+      return `${CONST.IMG_BASE_URL}/${CONST.JOB_GUARDIAN}/${CONST.VARIANT}`;
 
     case 2: 
-      return imgUrl + "warrior.webp";
-      break;
+      return `${CONST.IMG_BASE_URL}/${CONST.JOB_WARRIOR}/${CONST.VARIANT}`;
 
     case 3:
-      return imgUrl + "striker.webp";
-      break;
+      return `${CONST.IMG_BASE_URL}/${CONST.JOB_STRIKER}/${CONST.VARIANT}`;
 
     case 4:
-      return imgUrl + "shooter.webp";
-      break;
-
+      return `${CONST.IMG_BASE_URL}/${CONST.JOB_SHOOTER}/${CONST.VARIANT}`;
     case 5:
-      return imgUrl + "priest.webp";
-      break;
+      return `${CONST.IMG_BASE_URL}/${CONST.JOB_PRIST}/${CONST.VARIANT}`;
 
     case 6:
-      return imgUrl + "commander.webp";
-      break;
+      return `${CONST.IMG_BASE_URL}/${CONST.JOB_COMMANDER}/${CONST.VARIANT}`;
   }
 }
 
 const getElement = (elementId) => {
-  const imgUrl = 'http://localhost:5173/icons/element/'
   switch (elementId) {
     case 1:
-      return imgUrl + "water.webp";
-      break;
-
+      return `${CONST.IMG_BASE_URL}/${CONST.ELEMENT_WATER}/${CONST.VARIANT}`;
+  
     case 2: 
-      return imgUrl + "fire.webp";
-      break;
+      return `${CONST.IMG_BASE_URL}/${CONST.ELEMENT_FIRE}/${CONST.VARIANT}`;
 
     case 3:
-      return imgUrl + "earth.webp";
-      break;
-
+      return `${CONST.IMG_BASE_URL}/${CONST.ELEMENT_EARTH}/${CONST.VARIANT}`;
     case 4:
-      return imgUrl + "light.webp";
-      break;
-
+      return `${CONST.IMG_BASE_URL}/${CONST.ELEMENT_LIGHT}/${CONST.VARIANT}`;
     case 5:
-      return imgUrl + "night.webp";
-      break;
+      return `${CONST.IMG_BASE_URL}/${CONST.ELEMENT_DARK}/${CONST.VARIANT}`;
   }
 }
+
+
+
+const handleScroll = () => {
+  const scrollTop = window.scrollY;
+  // console.log('scrollTop:', scrollTop);
+  isScrollShow.value = scrollTop > 200;
+};
+
+const scrollToSection = (id) => {
+  
+  switch (id) {
+    case 'characters':
+      charaDiv.value?.scrollIntoView({ behavior: 'smooth' });
+      break;
+    case 'skills':
+      skillDiv.value?.scrollIntoView({ behavior: 'smooth' });
+      break;
+    case 'artifacts':
+      artifactDiv.value?.scrollIntoView({ behavior: 'smooth' });
+      break;
+    default:
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      break;
+  }
+};
+
+const getImgUrl = (imgId) => {
+  if (!imgId || imgId === 'placeholder') {
+    return `${CONST.IMG_BASE_URL}/${CONST.PLACEHOLDER}/${CONST.VARIANT}`;
+  }
+  return `${CONST.IMG_BASE_URL}/${imgId}/${CONST.VARIANT}`;
+};
+
 
 //enum값 call 페이지 랜딩 시 한 번만
 const callEnums = async () => {
@@ -671,10 +765,14 @@ const callEnums = async () => {
 //
 onMounted(async () => {
   // isLoading.value = true;
-  try{
+  window.addEventListener('scroll', handleScroll);
 
+  try{
+    
     await callEnums();
     await handleSearch();
+    await highlighting();
+    
     // await pickUpList();
   }catch (e) {
     console.log(e);
@@ -683,6 +781,10 @@ onMounted(async () => {
     // isLoading.value = false
   }
   
+})
+
+onUnmounted(()=>{
+  window.addEventListener('scroll', handleScroll);
 })
 </script>
 
@@ -727,5 +829,11 @@ input:focus {
 /* Ensure smooth scrolling for anchor links */
 html {
   scroll-behavior: smooth;
+}
+</style>
+
+<style scoped>
+.top-btn {
+  @apply bg-white/70 border rounded-full shadow-sm px-2 py-1 text-xs text-gray-800 hover:bg-white/90 transition;
 }
 </style>

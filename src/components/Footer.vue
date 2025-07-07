@@ -8,9 +8,9 @@
             &copy; {{ new Date().getFullYear() }} Copyright CLOVERGAMES.INC All rights reserved.
           </p>
         </div>
-        <div class="flex gap-4">
+        <!-- <div class="flex gap-4">
           <a href="#" class="text-sm font-medium text-white hover:underline underline-offset-4">Contact</a>
-        </div>
+        </div> -->
       </div>
     </footer>
 
