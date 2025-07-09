@@ -1,36 +1,40 @@
-name: Deploy Frontend
+name: Deploy Frontend with Docker
 
 on:
   workflow_dispatch:
 
 jobs:
-  build-and-upload:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Build Docker image
+        run: docker build -t my-frontend:latest .
 
-      - name: Build project
-        run: npm run build
+      - name: Save Docker image to tar
+        run: docker save my-frontend:latest -o frontend.tar
 
-      - name: Setup SSH key
+      - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Add known hosts
-        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Upload dist to EC2
+      - name: Copy image to EC2
         run: |
-          rsync -avz -e "ssh -i ~/.ssh/id_rsa" dist/ ubuntu@${{ secrets.SSH_HOST }}:/home/ubuntu/frontend/
+          scp frontend.tar ubuntu@${{ secrets.SSH_HOST }}:/home/ubuntu/frontend.tar
+
+      - name: Load + run image on EC2
+        run: |
+          ssh ubuntu@${{ secrets.SSH_HOST }} << 'EOF'
+            docker load -i /home/ubuntu/frontend.tar
+            docker stop frontend || true && docker rm frontend || true
+            docker run -d --name frontend -p 80:80 my-frontend:latest
+          EOF
