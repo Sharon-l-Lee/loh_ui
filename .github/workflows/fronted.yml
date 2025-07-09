@@ -29,12 +29,12 @@ jobs:
 
       - name: Copy image to EC2
         run: |
-          scp frontend.tar ubuntu@${{ secrets.SSH_HOST }}:/home/ubuntu/frontend/frontend.tar
+          scp frontend.tar ubuntu@${{ secrets.SSH_HOST }}:/home/ubuntu/app/frontend/frontend.tar
 
       - name: Load + run image on EC2
         run: |
           ssh ubuntu@${{ secrets.SSH_HOST }} << 'EOF'
-            docker load -i /home/ubuntu/frontend/frontend.tar
+            docker load -i /home/ubuntu/app/frontend/frontend.tar
             docker stop frontend || true && docker rm frontend || true
             docker run -d --name frontend -p 80:80 loh-frontend:latest
           EOF
