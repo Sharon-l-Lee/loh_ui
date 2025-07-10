@@ -1,6 +1,7 @@
 import  axios  from 'axios';  
 
-const url ="http://localhost:8888/api/"
+const dev_url ="http://localhost:8888/api/"
+const url ="/api/"
 
 
 const instance = axios.create({
