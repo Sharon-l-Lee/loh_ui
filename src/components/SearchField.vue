@@ -517,7 +517,7 @@ const handleSearch = async () => {
     artifacts.value = response.data.artifacts;  
     characters.value = response.data.characters;  
     skills.value = response.data.skills;
-
+    highlighting();
     
   })
   .catch((error)=> {
