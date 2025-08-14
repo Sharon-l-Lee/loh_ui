@@ -503,7 +503,7 @@ const handleSearch = async () => {
   await selectSearch();
   
   const keywords = searchQuery.value.split(' ');
-  console.log(keywords);
+  // console.log(keywords);
   
   await instance.post('search', {
       keywords: keywords,
@@ -624,7 +624,7 @@ const resetFilters =() => {
 }
 
 const handleAvailabilityChange = () => {
-  console.log(selectedAvailability.value);
+  // console.log(selectedAvailability.value);
   if(!selectedAvailability.value.includes('always')){
     selectedCurrencies.value = []
   }else if(!selectedAvailability.value.includes('limited')){
@@ -647,8 +647,8 @@ const toggleDropdown = (dropdownName) => {
 }
 
 const toggleCurrency = (currency) => {
-  console.log(currency);
-  console.log(selectedCurrencies.value);
+  // console.log(currency);
+  // console.log(selectedCurrencies.value);
   
   
   const index = selectedCurrencies.value.indexOf(currency)
@@ -759,7 +759,6 @@ const callEnums = async () => {
     ...summon.data.filter((item)=>item.category.includes('LIMITED'))
   )
   
-  console.log(acquisitonAlways.value);
 }
 
 //
