@@ -305,6 +305,7 @@
                       :src="getImgUrl(skill.cf_url)" 
                       class="w-16 h-16 rounded-lg object-cover"
                       alt="스킬 이미지"
+                      loading="lazy"
                     />
 
                   <!-- 오른쪽 텍스트 영역 -->
@@ -354,6 +355,7 @@
                   <!-- 아티팩트 이미지 -->
                   <img
                     :src="getImgUrl(af.cf_url)" 
+                    loading="lazy"
                     class="w-16 h-16 rounded-lg object-cover shrink-0"
                     alt="아티팩트 이미지"
                   />
