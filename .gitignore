@@ -30,3 +30,6 @@ dist-ssr
 .env.*.local
 *.log
 *.conf
+nginx/default.conf
+**/default.conf
+nginx/*.conf
